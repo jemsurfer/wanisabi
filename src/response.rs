@@ -2,6 +2,169 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "snake_case")]
+enum SubjectType {
+    Kanji,
+    Radical,
+    Vocabulary
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Assignment {
+    available_at: Option<DateTime<Utc>>,
+    burned_at: Option<DateTime<Utc>>,
+    created_at: DateTime<Utc>,
+    hidden: bool,
+    passed_at: Option<DateTime<Utc>>,
+    resurrected_at: Option<DateTime<Utc>>,
+    srs_stage: i32,
+    started_at: Option<DateTime<Utc>>,
+    subject_id: i32,
+    subject_type: SubjectType,
+    unlocked_at: Option<DateTime<Utc>>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct LevelProgression {
+    created_at: DateTime<Utc>,
+    abandoned_at: Option<DateTime<Utc>>,
+    completed_at: Option<DateTime<Utc>>,
+    level: i32,
+    passed_at: Option<DateTime<Utc>>,
+    started_at: Option<DateTime<Utc>>,
+    unlocked_at: Option<DateTime<Utc>>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Reset {
+    confirmed_at: Option<DateTime<Utc>>,
+    created_at: DateTime<Utc>,
+    original_level: i32,
+    target_level: i32
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Review {
+    assignment_id: i32,
+    created_at: DateTime<Utc>,
+    cending_srs_stage: i32,
+    incorrect_meaning_answers: i32,
+    incorrect_reading_answers: i32,
+    spaced_repetition_system_id: i32,
+    starting_srs_stage: i32,
+    subject_id: i32
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ReviewStatistic {
+    created_at: DateTime<Utc>,
+    hidden: bool,
+    meaning_correct: i32,
+    meaning_current_streak: i32,
+    meaning_incorrect: i32,
+    meaning_max_streak: i32,
+    percentage_correct: i32,
+    reading_correct: i32,
+    reading_current_streak: i32,
+    reading_incorrect: i32,
+    reading_max_streak: i32,
+    subject_id: i32,
+    subject_type: SubjectType
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SrsStage {
+    interval: Option<i32>,
+    interval_unit: Option<String>,
+    position: i32
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SpacedRepetionSystem {
+    burning_stage_position: i32,
+    created_at: DateTime<Utc>,
+    description: String,
+    name: String,
+    passing_stage_position: i32,
+    stages: Vec<SrsStage>,
+    starting_stage_position: i32,
+    unlocking_stage_position: i32
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StudyMaterial {
+    created_at: DateTime<Utc>,
+    hidden: bool,
+    meaning_note: Option<String>,
+    meaning_synonyms: Vec<String>,
+    reading_note: Option<String>,
+    subject_id: i32,
+    subject_type: SubjectType
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "snake_case")]
+enum AuxiliaryMeaningType {
+    Whitelist,
+    Blacklist
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AuxiliaryMeaning {
+    meaning: String,
+    #[serde(rename = "type")]
+    kind: AuxiliaryMeaningType
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Meaning {
+    meaning: String,
+    primary: bool,
+    accepted_answer: bool
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Subject {
+    auxiliary_meanings: Vec<AuxiliaryMeaning>,
+    characters: String,
+    created_at: DateTime<Utc>,
+    document_url: String,
+    hidden_at: Option<DateTime<Utc>>,
+    lesson_position: i32,
+    level: i32,
+    meaning_mnemonic: String,
+    meanings: Vec<Meaning>,
+    slug: String,
+    spaced_repetition_system_id: i32
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SummaryLesson {
+    available_at: DateTime<Utc>,
+    subject_ids: Vec<i32>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SummaryReview {
+    available_at: DateTime<Utc>,
+    subject_ids: Vec<i32>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Summary {
+    lessons: Vec<SummaryLesson>,
+    next_reviews_at: Option<DateTime<Utc>>,
+    reviews: Vec<SummaryReview>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct VoiceActor {
+    description: String,
+    gender: String,
+    name: String
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct UserSubscription {
     active: bool,
     max_level_granted: i32,
