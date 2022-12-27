@@ -2,7 +2,8 @@ use std::env;
 
 use serde::{Deserialize, de};
 
-use crate::response::UserResponse;
+use crate::model::Assignment;
+use crate::response::{ CollectionResponse, UserResponse};
 
 #[derive(Clone, Debug)]
 struct WanikaniClient {
@@ -20,8 +21,15 @@ impl WanikaniClient {
     }
 
     pub async fn get_user_info(&self) -> Result<UserResponse, reqwest::Error> {
-        self._get::<UserResponse>("/user").await
+        self._get("/user").await
     }
+
+    pub async fn get_assignments(&self) -> Result<CollectionResponse<Assignment>, reqwest::Error> {
+        self._get("/assigments").await
+    }
+
+
+
     // add code here
 }
 

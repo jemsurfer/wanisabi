@@ -195,14 +195,14 @@ pub struct ResourceResponse<T> {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct PagesResponse {
+pub struct PagesResponse {
     next_url: String,
     previous_url: String,
     per_page: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct CollectionResponse<T> {
+pub struct CollectionResponse<T> {
     object: String,
     url: String,
     data_updated_at: DateTime<Utc>,
