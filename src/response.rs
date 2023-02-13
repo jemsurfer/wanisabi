@@ -1,9 +1,6 @@
+use crate::model::subject_type::SubjectType;
 use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
-
-
-
-
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LevelProgression {
@@ -21,7 +18,7 @@ pub struct Reset {
     confirmed_at: Option<DateTime<Utc>>,
     created_at: DateTime<Utc>,
     original_level: i32,
-    target_level: i32
+    target_level: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -33,7 +30,7 @@ pub struct Review {
     incorrect_reading_answers: i32,
     spaced_repetition_system_id: i32,
     starting_srs_stage: i32,
-    subject_id: i32
+    subject_id: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -50,14 +47,14 @@ pub struct ReviewStatistic {
     reading_incorrect: i32,
     reading_max_streak: i32,
     subject_id: i32,
-    subject_type: SubjectType
+    subject_type: SubjectType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SrsStage {
     interval: Option<i32>,
     interval_unit: Option<String>,
-    position: i32
+    position: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -69,7 +66,7 @@ pub struct SpacedRepetionSystem {
     passing_stage_position: i32,
     stages: Vec<SrsStage>,
     starting_stage_position: i32,
-    unlocking_stage_position: i32
+    unlocking_stage_position: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -80,28 +77,28 @@ pub struct StudyMaterial {
     meaning_synonyms: Vec<String>,
     reading_note: Option<String>,
     subject_id: i32,
-    subject_type: SubjectType
+    subject_type: SubjectType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 enum AuxiliaryMeaningType {
     Whitelist,
-    Blacklist
+    Blacklist,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AuxiliaryMeaning {
     meaning: String,
     #[serde(rename = "type")]
-    kind: AuxiliaryMeaningType
+    kind: AuxiliaryMeaningType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Meaning {
     meaning: String,
     primary: bool,
-    accepted_answer: bool
+    accepted_answer: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -116,19 +113,19 @@ pub struct Subject {
     meaning_mnemonic: String,
     meanings: Vec<Meaning>,
     slug: String,
-    spaced_repetition_system_id: i32
+    spaced_repetition_system_id: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SummaryLesson {
     available_at: DateTime<Utc>,
-    subject_ids: Vec<i32>
+    subject_ids: Vec<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SummaryReview {
     available_at: DateTime<Utc>,
-    subject_ids: Vec<i32>
+    subject_ids: Vec<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -142,7 +139,7 @@ pub struct Summary {
 pub struct VoiceActor {
     description: String,
     gender: String,
-    name: String
+    name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -151,7 +148,7 @@ pub struct UserSubscription {
     max_level_granted: i32,
     period_ends_at: Option<DateTime<Utc>>,
     #[serde(rename = "type")]
-    kind: String
+    kind: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -161,7 +158,7 @@ pub struct UserPreferences {
     lessons_batch_size: i32,
     lessons_presentation_order: String,
     reviews_autoplay_audio: bool,
-    reviews_display_srs_indicator: bool
+    reviews_display_srs_indicator: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -173,7 +170,7 @@ pub struct User {
     profile_url: String,
     started_at: DateTime<Utc>,
     subscription: UserSubscription,
-    username: String
+    username: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -183,7 +180,6 @@ pub struct UserResponse {
     data_updated_at: DateTime<Utc>,
     data: User,
 }
-
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ResourceResponse<T> {
@@ -196,8 +192,8 @@ pub struct ResourceResponse<T> {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PagesResponse {
-    next_url: String,
-    previous_url: String,
+    next_url: Option<String>,
+    previous_url: Option<String>,
     per_page: i32,
 }
 
