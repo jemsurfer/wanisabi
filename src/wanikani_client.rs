@@ -1,14 +1,16 @@
 use std::env;
 
-use serde::{Deserialize, de};
+use reqwest::Result;
+use serde::de;
 
-use crate::model::Assignment;
-use crate::response::{ CollectionResponse, UserResponse};
+use crate::model::assignment::Assignment;
+use crate::response::{CollectionResponse, ResourceResponse, UserResponse};
+use std::fmt::Debug;
 
 #[derive(Clone, Debug)]
-struct WanikaniClient {
+pub struct WanikaniClient {
     pub key: String,
-    client: reqwest::Client
+    client: reqwest::Client,
 }
 
 impl WanikaniClient {
@@ -16,19 +18,29 @@ impl WanikaniClient {
         let client = reqwest::Client::new();
         Self { key, client }
     }
-    async fn _get<T: de::DeserializeOwned>(&self, url: &str) -> Result<T, reqwest::Error> {
-        self.client.get("https://api.wanikani.com/v2".to_string() + url).bearer_auth(self.key.to_owned()).send().await?.json().await
+    async fn _get<T>(&self, url: &str) -> Result<T>
+    where
+        T: de::DeserializeOwned + Debug,
+    {
+        let res = self
+            .client
+            .get("https://api.wanikani.com/v2".to_string() + url)
+            .bearer_auth(self.key.to_owned())
+            .send()
+            .await?;
+
+        res.json().await
     }
 
-    pub async fn get_user_info(&self) -> Result<UserResponse, reqwest::Error> {
+    pub async fn get_user_info(&self) -> Result<UserResponse> {
         self._get("/user").await
     }
 
-    pub async fn get_assignments(&self) -> Result<CollectionResponse<Assignment>, reqwest::Error> {
-        self._get("/assigments").await
+    pub async fn get_assignments(
+        &self,
+    ) -> Result<CollectionResponse<ResourceResponse<Assignment>>> {
+        self._get("/assignments").await
     }
-
-
 
     // add code here
 }
@@ -37,12 +49,14 @@ impl Default for WanikaniClient {
     fn default() -> Self {
         let client = reqwest::Client::new();
         match env::var_os("WANIKANI_API_KEY") {
-            Some(key) => Self { key: key.into_string().unwrap(), client },
-            None => {
-                Self { key: String::new(), client }
-            }
+            Some(key) => Self {
+                key: key.into_string().unwrap(),
+                client,
+            },
+            None => Self {
+                key: String::new(),
+                client,
+            },
         }
     }
-
-
 }
