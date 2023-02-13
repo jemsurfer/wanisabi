@@ -1,3 +1,8 @@
+use chrono::prelude::*;
+use serde::{Deserialize, Serialize};
+
+use crate::subject_type::SubjectType;
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Assignment {
     available_at: Option<DateTime<Utc>>,
