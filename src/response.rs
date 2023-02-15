@@ -4,80 +4,80 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LevelProgression {
-    created_at: DateTime<Utc>,
-    abandoned_at: Option<DateTime<Utc>>,
-    completed_at: Option<DateTime<Utc>>,
-    level: i32,
-    passed_at: Option<DateTime<Utc>>,
-    started_at: Option<DateTime<Utc>>,
-    unlocked_at: Option<DateTime<Utc>>,
+    pub created_at: DateTime<Utc>,
+    pub abandoned_at: Option<DateTime<Utc>>,
+    pub completed_at: Option<DateTime<Utc>>,
+    pub level: i32,
+    pub passed_at: Option<DateTime<Utc>>,
+    pub started_at: Option<DateTime<Utc>>,
+    pub unlocked_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Reset {
-    confirmed_at: Option<DateTime<Utc>>,
-    created_at: DateTime<Utc>,
-    original_level: i32,
-    target_level: i32,
+    pub confirmed_at: Option<DateTime<Utc>>,
+    pub created_at: DateTime<Utc>,
+    pub original_level: i32,
+    pub target_level: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Review {
-    assignment_id: i32,
-    created_at: DateTime<Utc>,
-    cending_srs_stage: i32,
-    incorrect_meaning_answers: i32,
-    incorrect_reading_answers: i32,
-    spaced_repetition_system_id: i32,
-    starting_srs_stage: i32,
-    subject_id: i32,
+    pub assignment_id: i32,
+    pub created_at: DateTime<Utc>,
+    pub cending_srs_stage: i32,
+    pub incorrect_meaning_answers: i32,
+    pub incorrect_reading_answers: i32,
+    pub spaced_repetition_system_id: i32,
+    pub starting_srs_stage: i32,
+    pub subject_id: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ReviewStatistic {
-    created_at: DateTime<Utc>,
-    hidden: bool,
-    meaning_correct: i32,
-    meaning_current_streak: i32,
-    meaning_incorrect: i32,
-    meaning_max_streak: i32,
-    percentage_correct: i32,
-    reading_correct: i32,
-    reading_current_streak: i32,
-    reading_incorrect: i32,
-    reading_max_streak: i32,
-    subject_id: i32,
-    subject_type: SubjectType,
+    pub created_at: DateTime<Utc>,
+    pub hidden: bool,
+    pub meaning_correct: i32,
+    pub meaning_current_streak: i32,
+    pub meaning_incorrect: i32,
+    pub meaning_max_streak: i32,
+    pub percentage_correct: i32,
+    pub reading_correct: i32,
+    pub reading_current_streak: i32,
+    pub reading_incorrect: i32,
+    pub reading_max_streak: i32,
+    pub subject_id: i32,
+    pub subject_type: SubjectType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SrsStage {
-    interval: Option<i32>,
-    interval_unit: Option<String>,
-    position: i32,
+    pub interval: Option<i32>,
+    pub interval_unit: Option<String>,
+    pub position: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SpacedRepetionSystem {
-    burning_stage_position: i32,
-    created_at: DateTime<Utc>,
-    description: String,
-    name: String,
-    passing_stage_position: i32,
-    stages: Vec<SrsStage>,
-    starting_stage_position: i32,
-    unlocking_stage_position: i32,
+    pub burning_stage_position: i32,
+    pub created_at: DateTime<Utc>,
+    pub description: String,
+    pub name: String,
+    pub passing_stage_position: i32,
+    pub stages: Vec<SrsStage>,
+    pub starting_stage_position: i32,
+    pub unlocking_stage_position: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StudyMaterial {
-    created_at: DateTime<Utc>,
-    hidden: bool,
-    meaning_note: Option<String>,
-    meaning_synonyms: Vec<String>,
-    reading_note: Option<String>,
-    subject_id: i32,
-    subject_type: SubjectType,
+    pub created_at: DateTime<Utc>,
+    pub hidden: bool,
+    pub meaning_note: Option<String>,
+    pub meaning_synonyms: Vec<String>,
+    pub reading_note: Option<String>,
+    pub subject_id: i32,
+    pub subject_type: SubjectType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -89,120 +89,120 @@ enum AuxiliaryMeaningType {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AuxiliaryMeaning {
-    meaning: String,
+    pub meaning: String,
     #[serde(rename = "type")]
-    kind: AuxiliaryMeaningType,
+    pub kind: AuxiliaryMeaningType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Meaning {
-    meaning: String,
-    primary: bool,
-    accepted_answer: bool,
+    pub meaning: String,
+    pub primary: bool,
+    pub accepted_answer: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Subject {
-    auxiliary_meanings: Vec<AuxiliaryMeaning>,
-    characters: String,
-    created_at: DateTime<Utc>,
-    document_url: String,
-    hidden_at: Option<DateTime<Utc>>,
-    lesson_position: i32,
-    level: i32,
-    meaning_mnemonic: String,
-    meanings: Vec<Meaning>,
-    slug: String,
-    spaced_repetition_system_id: i32,
+    pub auxiliary_meanings: Vec<AuxiliaryMeaning>,
+    pub characters: String,
+    pub created_at: DateTime<Utc>,
+    pub document_url: String,
+    pub hidden_at: Option<DateTime<Utc>>,
+    pub lesson_position: i32,
+    pub level: i32,
+    pub meaning_mnemonic: String,
+    pub meanings: Vec<Meaning>,
+    pub slug: String,
+    pub spaced_repetition_system_id: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SummaryLesson {
-    available_at: DateTime<Utc>,
-    subject_ids: Vec<i32>,
+    pub available_at: DateTime<Utc>,
+    pub subject_ids: Vec<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SummaryReview {
-    available_at: DateTime<Utc>,
-    subject_ids: Vec<i32>,
+    pub available_at: DateTime<Utc>,
+    pub subject_ids: Vec<i32>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Summary {
-    lessons: Vec<SummaryLesson>,
-    next_reviews_at: Option<DateTime<Utc>>,
-    reviews: Vec<SummaryReview>,
+    pub lessons: Vec<SummaryLesson>,
+    pub next_reviews_at: Option<DateTime<Utc>>,
+    pub reviews: Vec<SummaryReview>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct VoiceActor {
-    description: String,
-    gender: String,
-    name: String,
+    pub description: String,
+    pub gender: String,
+    pub name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserSubscription {
-    active: bool,
-    max_level_granted: i32,
-    period_ends_at: Option<DateTime<Utc>>,
+    pub active: bool,
+    pub max_level_granted: i32,
+    pub period_ends_at: Option<DateTime<Utc>>,
     #[serde(rename = "type")]
-    kind: String,
+    pub kind: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserPreferences {
-    default_voice_actor_id: i32,
-    lessons_autoplay_audio: bool,
-    lessons_batch_size: i32,
-    lessons_presentation_order: String,
-    reviews_autoplay_audio: bool,
-    reviews_display_srs_indicator: bool,
+    pub default_voice_actor_id: i32,
+    pub lessons_autoplay_audio: bool,
+    pub lessons_batch_size: i32,
+    pub lessons_presentation_order: String,
+    pub reviews_autoplay_audio: bool,
+    pub reviews_display_srs_indicator: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
-    id: String,
-    current_vacation_started_at: Option<DateTime<Utc>>,
-    level: i32,
-    preferences: UserPreferences,
-    profile_url: String,
-    started_at: DateTime<Utc>,
-    subscription: UserSubscription,
-    username: String,
+    pub id: String,
+    pub current_vacation_started_at: Option<DateTime<Utc>>,
+    pub level: i32,
+    pub preferences: UserPreferences,
+    pub profile_url: String,
+    pub started_at: DateTime<Utc>,
+    pub subscription: UserSubscription,
+    pub username: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserResponse {
-    object: String,
-    url: String,
-    data_updated_at: DateTime<Utc>,
-    data: User,
+    pub object: String,
+    pub url: String,
+    pub data_updated_at: DateTime<Utc>,
+    pub data: User,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ResourceResponse<T> {
-    id: i32,
-    object: String,
-    url: String,
-    data_updated_at: DateTime<Utc>,
-    data: T,
+    pub id: i32,
+    pub object: String,
+    pub url: String,
+    pub data_updated_at: DateTime<Utc>,
+    pub data: T,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PagesResponse {
-    next_url: Option<String>,
-    previous_url: Option<String>,
-    per_page: i32,
+    pub next_url: Option<String>,
+    pub previous_url: Option<String>,
+    pub per_page: i32,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CollectionResponse<T> {
-    object: String,
-    url: String,
-    data_updated_at: DateTime<Utc>,
-    pages: PagesResponse,
-    total_count: i32,
-    data: Vec<T>,
+    pub object: String,
+    pub url: String,
+    pub data_updated_at: DateTime<Utc>,
+    pub pages: PagesResponse,
+    pub total_count: i32,
+    pub data: Vec<T>,
 }
