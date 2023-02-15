@@ -13,6 +13,12 @@ pub struct WanikaniClient {
     client: reqwest::Client,
 }
 
+macro_rules! GET {
+    ($self:ident, $route:expr) => {
+        $self._get($route).await
+    };
+}
+
 impl WanikaniClient {
     pub fn new(key: String) -> Self {
         let client = reqwest::Client::new();
@@ -22,27 +28,28 @@ impl WanikaniClient {
     where
         T: de::DeserializeOwned + Debug,
     {
-        let res = self
-            .client
+        self.client
             .get("https://api.wanikani.com/v2".to_string() + url)
             .bearer_auth(self.key.to_owned())
             .send()
-            .await?;
-
-        res.json().await
+            .await?
+            .json()
+            .await
     }
 
     pub async fn get_user_info(&self) -> Result<UserResponse> {
-        self._get("/user").await
+        GET!(self, "/user")
     }
 
     pub async fn get_assignments(
         &self,
     ) -> Result<CollectionResponse<ResourceResponse<Assignment>>> {
-        self._get("/assignments").await
+        GET!(self, "/assignments")
     }
 
-    // add code here
+    pub async fn get_assignment(&self, id: i32) -> Result<ResourceResponse<Assignment>> {
+        GET!(self, format!("/assignments/{id}").as_str())
+    }
 }
 
 impl Default for WanikaniClient {
