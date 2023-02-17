@@ -105,7 +105,7 @@ impl WanikaniClient {
     //     GET!(self, "/assignments")
     // }
 
-    // pub async fn get_assignment(&self, id: i32) -> Result<ResourceResponse<Assignment>> {
+    // pub async fn get_assignment(&self, id: i64) -> Result<ResourceResponse<Assignment>> {
     //     GET!(self, format!("/assignments/{id}").as_str())
     // }
 }

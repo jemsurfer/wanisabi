@@ -16,14 +16,14 @@ pub enum AssignmentsFilter {
     AvailableBefore(DateTime<Utc>),
     Burned(bool),
     Hidden(bool),
-    Ids(Vec<i32>),
+    Ids(Vec<i64>),
     ImmediatelyAvailableForLessons(()),
     ImmediatelyAvailableForReview(()),
     InReview(()),
-    Levels(Vec<i32>),
-    SrsStages(Vec<i32>),
+    Levels(Vec<i64>),
+    SrsStages(Vec<i64>),
     Started(bool),
-    SubjetIds(Vec<i32>),
+    SubjetIds(Vec<i64>),
     SubjetTypes(Vec<String>),
     Unlocked(bool),
     UpdatedAfter(DateTime<Utc>),
@@ -45,6 +45,6 @@ impl WanikaniClient {
         get_assignment,
         "assignments/{id}",
         ResourceResponse<Assignment>,
-        id: i32
+        id: i64
     );
 }
