@@ -20,7 +20,7 @@ async fn main() -> Result<(), reqwest::Error> {
         client.get_assignments_filtered(params).await?;
     let d = assignments.data;
     let first = d.first().unwrap();
-    let id = (&(*first).clone()).id;
+    let id = first.id;
     let assignment = client.get_assignment(id).await?;
     assert_eq!(assignment.data, first.data);
     Ok(())
