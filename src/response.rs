@@ -3,26 +3,6 @@ use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Reset {
-    pub confirmed_at: Option<DateTime<Utc>>,
-    pub created_at: DateTime<Utc>,
-    pub original_level: i32,
-    pub target_level: i32,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Review {
-    pub assignment_id: i32,
-    pub created_at: DateTime<Utc>,
-    pub cending_srs_stage: i32,
-    pub incorrect_meaning_answers: i32,
-    pub incorrect_reading_answers: i32,
-    pub spaced_repetition_system_id: i32,
-    pub starting_srs_stage: i32,
-    pub subject_id: i32,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
 pub struct ReviewStatistic {
     pub created_at: DateTime<Utc>,
     pub hidden: bool,
