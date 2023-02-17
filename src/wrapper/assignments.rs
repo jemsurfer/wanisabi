@@ -6,7 +6,7 @@ use crate::{
 };
 use chrono::{DateTime, Utc};
 use reqwest::Error;
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Deserialize, Serialize};
 use wanikani_rs_model::assignment::Assignment;
 
 #[derive(Serialize, Deserialize)]
@@ -43,7 +43,7 @@ impl WanikaniClient {
     );
     get!(
         get_assignment,
-        "assignments/<id>",
+        "assignments",
         id: i32,
         ResourceResponse<Assignment>
     );

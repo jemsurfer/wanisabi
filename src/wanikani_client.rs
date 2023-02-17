@@ -1,10 +1,7 @@
-use reqwest::Result;
 use serde::de::DeserializeOwned;
-use serde::{de, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 use std::env;
 
-use crate::model::assignment::Assignment;
-use crate::response::{CollectionResponse, ResourceResponse, UserResponse};
 use serde_with::EnumMap;
 use std::fmt::Debug;
 #[derive(Clone, Debug)]
