@@ -4,11 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 wanikani-rs-model = { path = "wanikani-rs-model", version = "0.1.0" }
 chrono = { version = "0.4.23", features = ["serde"] }
 env = "0.0.0"
 reqwest = { version = "0.11.13", features = ["json"] }
 serde = { version = "1.0.150", features = ["derive"]}
+serde_json = { version = "1.0.93" }
 tokio = { version = "1", features = ["full"] }
+serde_with = "2.2.0"
+serde_qs = "0.11.0"
+serde_derive = "1.0.152"
+

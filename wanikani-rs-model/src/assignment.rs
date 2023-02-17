@@ -3,17 +3,17 @@ use serde::{Deserialize, Serialize};
 
 use crate::subject_type::SubjectType;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Assignment {
-    available_at: Option<DateTime<Utc>>,
-    burned_at: Option<DateTime<Utc>>,
-    created_at: DateTime<Utc>,
-    hidden: bool,
-    passed_at: Option<DateTime<Utc>>,
-    resurrected_at: Option<DateTime<Utc>>,
-    srs_stage: i32,
-    started_at: Option<DateTime<Utc>>,
-    subject_id: i32,
-    subject_type: SubjectType,
-    unlocked_at: Option<DateTime<Utc>>,
+    pub available_at: Option<DateTime<Utc>>,
+    pub burned_at: Option<DateTime<Utc>>,
+    pub created_at: DateTime<Utc>,
+    pub hidden: bool,
+    pub passed_at: Option<DateTime<Utc>>,
+    pub resurrected_at: Option<DateTime<Utc>>,
+    pub srs_stage: i32,
+    pub started_at: Option<DateTime<Utc>>,
+    pub subject_id: i32,
+    pub subject_type: SubjectType,
+    pub unlocked_at: Option<DateTime<Utc>>,
 }
