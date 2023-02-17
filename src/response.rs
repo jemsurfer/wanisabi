@@ -181,7 +181,7 @@ pub struct UserResponse {
     pub data: User,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ResourceResponse<T> {
     pub id: i32,
     pub object: String,
@@ -190,14 +190,14 @@ pub struct ResourceResponse<T> {
     pub data: T,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PagesResponse {
     pub next_url: Option<String>,
     pub previous_url: Option<String>,
     pub per_page: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CollectionResponse<T> {
     pub object: String,
     pub url: String,
