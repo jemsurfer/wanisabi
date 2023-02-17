@@ -2,7 +2,7 @@ use crate::model::subject_type::SubjectType;
 use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct LevelProgression {
     pub created_at: DateTime<Utc>,
     pub abandoned_at: Option<DateTime<Utc>>,

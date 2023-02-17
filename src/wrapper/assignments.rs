@@ -43,8 +43,8 @@ impl WanikaniClient {
     );
     get!(
         get_assignment,
-        "assignments",
-        id: i32,
-        ResourceResponse<Assignment>
+        "assignments/{id}",
+        ResourceResponse<Assignment>,
+        id: i32
     );
 }

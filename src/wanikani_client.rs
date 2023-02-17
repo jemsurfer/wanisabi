@@ -17,35 +17,53 @@ pub struct QP<T: DeserializeOwned + Serialize>(#[serde_as(as = "EnumMap")] pub V
 pub mod macros {
     #[macro_export]
     macro_rules! get {
+        ($name:tt, $route:expr, $return:ty) => {
+            pub async fn $name(&self) -> Result<$return, Error> {
+                let url = format!("https://api.wanikani.com/v2/{}", $route);
+                let req = self
+                    .client
+                    .get(url)
+                    .bearer_auth(self.key.to_owned());
+                req.send().await?.json().await
+            }
+        };
+
         ($name:tt, $route:expr, $query:ty, $return:ty) => {
             pub async fn $name(&self, query: Vec<$query>) -> Result<$return, Error> {
                 let qp: QP<$query> = QP(query);
                 let qs = qs::to_string(&qp).unwrap();
+                let url = format!("https://api.wanikani.com/v2/{}", $route);
                 let mut req = self
                     .client
-                    .get(format!("https://api.wanikani.com/v2/{}", $route))
+                    .get(url)
                     .bearer_auth(self.key.to_owned())
                     .build()?;
                 req.url_mut().set_query(Some(&qs));
                 return self.client.execute(req).await?.json().await;
             }
         };
-        ($name:tt, $route:expr, $return:ty) => {
-            pub async fn $name(&self) -> Result<$return, Error> {
+        ($name:tt, $route:expr, $return:ty, $($v:tt: $t:ty)+) => {
+            pub async fn $name(&self $(, $v: $t)+) -> Result<$return, Error> {
+                let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
                 let req = self
                     .client
-                    .get(format!("https://api.wanikani.com/v2/{}", $route))
+                    .get(url)
                     .bearer_auth(self.key.to_owned());
                 req.send().await?.json().await
             }
         };
-        ($name:tt, $route:expr, $v:tt: $t:ty, $return:ty) => {
-            pub async fn $name(&self, $v: $t) -> Result<$return, Error> {
-                let req = self
+        ($name:tt, $route:expr, $query:ty, $return:ty, $($v:tt: $t:ty)+) => {
+            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)+) -> Result<$return, Error> {
+                let qp: QP<$query> = QP(query);
+                let qs = qs::to_string(&qp).unwrap();
+                let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
+                let mut req = self
                     .client
-                    .get(format!("https://api.wanikani.com/v2/{}/{}", $route, $v))
-                    .bearer_auth(self.key.to_owned());
-                req.send().await?.json().await
+                    .get(url)
+                    .bearer_auth(self.key.to_owned())
+                    .build()?;
+                req.url_mut().set_query(Some(&qs));
+                return self.client.execute(req).await?.json().await;
             }
         };
     }
