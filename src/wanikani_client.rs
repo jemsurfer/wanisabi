@@ -1,28 +1,36 @@
 use reqwest::Result;
-use serde::{de, Serialize};
+use serde::de::DeserializeOwned;
+use serde::{de, Deserialize, Serialize};
 use std::env;
 
 use crate::model::assignment::Assignment;
 use crate::response::{CollectionResponse, ResourceResponse, UserResponse};
+use serde_with::EnumMap;
 use std::fmt::Debug;
-
 #[derive(Clone, Debug)]
 pub struct WanikaniClient {
     pub key: String,
     pub client: reqwest::Client,
 }
 
+#[serde_with::serde_as]
+#[derive(Serialize, Deserialize)]
+pub struct QP<T: DeserializeOwned + Serialize>(#[serde_as(as = "EnumMap")] pub Vec<T>);
+
 pub mod macros {
     #[macro_export]
     macro_rules! get {
         ($name:tt, $route:expr, $query:ty, $return:ty) => {
-            pub async fn $name(&self, query: &Vec<($query, &str)>) -> Result<$return, Error> {
-                let req = self
+            pub async fn $name(&self, query: Vec<$query>) -> Result<$return, Error> {
+                let qp: QP<$query> = QP(query);
+                let qs = qs::to_string(&qp).unwrap();
+                let mut req = self
                     .client
                     .get(format!("https://api.wanikani.com/v2/{}", $route))
                     .bearer_auth(self.key.to_owned())
-                    .query(query);
-                req.send().await?.json().await
+                    .build()?;
+                req.url_mut().set_query(Some(&qs));
+                return self.client.execute(req).await?.json().await;
             }
         };
         ($name:tt, $route:expr, $return:ty) => {
@@ -30,6 +38,15 @@ pub mod macros {
                 let req = self
                     .client
                     .get(format!("https://api.wanikani.com/v2/{}", $route))
+                    .bearer_auth(self.key.to_owned());
+                req.send().await?.json().await
+            }
+        };
+        ($name:tt, $route:expr, $v:tt: $t:ty, $return:ty) => {
+            pub async fn $name(&self, $v: $t) -> Result<$return, Error> {
+                let req = self
+                    .client
+                    .get(format!("https://api.wanikani.com/v2/{}/{}", $route, $v))
                     .bearer_auth(self.key.to_owned());
                 req.send().await?.json().await
             }

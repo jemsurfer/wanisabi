@@ -201,7 +201,7 @@ pub struct PagesResponse {
 pub struct CollectionResponse<T> {
     pub object: String,
     pub url: String,
-    pub data_updated_at: DateTime<Utc>,
+    pub data_updated_at: Option<DateTime<Utc>>,
     pub pages: PagesResponse,
     pub total_count: i32,
     pub data: Vec<T>,
