@@ -1,4 +1,3 @@
-#![feature(concat_idents)]
 pub use wanikani_rs_model as model;
 
 pub mod response;
