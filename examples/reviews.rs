@@ -12,7 +12,7 @@ async fn main() -> Result<(), reqwest::Error> {
     let reviews: CollectionResponse<ResourceResponse<Review>> =
         client.get_reviews_filtered(params).await?;
     let d = reviews.data;
-    if d.len() == 0 {
+    if d.is_empty() {
         return Ok(());
     }
     let first = d.first().unwrap();

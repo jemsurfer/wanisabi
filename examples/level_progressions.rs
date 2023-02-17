@@ -13,7 +13,7 @@ async fn main() -> Result<(), reqwest::Error> {
     let lps: CollectionResponse<ResourceResponse<LevelProgression>> =
         client.get_level_progressions_filtered(params).await?;
     let d = lps.data;
-    if d.len() == 0 {
+    if d.is_empty() {
         return Ok(());
     }
     let first = d.first().unwrap();
