@@ -1,9 +1,9 @@
 use wanikani_rs::{
-    response::{CollectionResponse, LevelProgression, ResourceResponse},
+    response::{CollectionResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
-    wrapper::{levels::LevelProgressionFilter},
+    wrapper::levels::LevelProgressionFilter,
 };
-
+use wanikani_rs_model::level_progression::LevelProgression;
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
@@ -19,3 +19,5 @@ async fn main() -> Result<(), reqwest::Error> {
     assert_eq!(assignment.data, first.data);
     Ok(())
 }
+
+

@@ -1,12 +1,13 @@
 use crate::{
     get,
-    response::{CollectionResponse, LevelProgression, ResourceResponse},
+    response::{CollectionResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
     wanikani_client::QP,
 };
 use chrono::{DateTime, Utc};
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
+use wanikani_rs_model::level_progression::LevelProgression;
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]

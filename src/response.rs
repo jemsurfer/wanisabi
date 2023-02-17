@@ -1,17 +1,6 @@
 use crate::model::subject_type::SubjectType;
-use chrono::prelude::*;
+use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct LevelProgression {
-    pub created_at: DateTime<Utc>,
-    pub abandoned_at: Option<DateTime<Utc>>,
-    pub completed_at: Option<DateTime<Utc>>,
-    pub level: i32,
-    pub passed_at: Option<DateTime<Utc>>,
-    pub started_at: Option<DateTime<Utc>>,
-    pub unlocked_at: Option<DateTime<Utc>>,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Reset {
