@@ -19,5 +19,3 @@ async fn main() -> Result<(), reqwest::Error> {
     assert_eq!(assignment.data, first.data);
     Ok(())
 }
-
-
