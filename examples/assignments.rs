@@ -1,4 +1,9 @@
-use wanikani_rs::{wanikani_client::WanikaniClient, wrapper::assignments::AssignmentsFilter};
+use wanikani_rs::{
+    response::{CollectionResponse, ResourceResponse},
+    wanikani_client::WanikaniClient,
+    wrapper::assignments::AssignmentsFilter,
+};
+use wanikani_rs_model::assignment::Assignment;
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
@@ -11,10 +16,11 @@ async fn main() -> Result<(), reqwest::Error> {
         //AssignmentsFilter::Hidden(false),
     ];
 
-    let assignments = client.get_assignments_filtered(params).await;
-    let d = assignments?.data;
+    let assignments: CollectionResponse<ResourceResponse<Assignment>> =
+        client.get_assignments_filtered(params).await?;
+    let d = assignments.data;
     let first = d.first().unwrap();
-    let id = first.clone().id;
+    let id = (&(*first).clone()).id;
     let assignment = client.get_assignment(id).await?;
     assert_eq!(assignment.data, first.data);
     Ok(())

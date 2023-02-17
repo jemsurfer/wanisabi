@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::subject_type::SubjectType;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct Assignment {
     pub available_at: Option<DateTime<Utc>>,
     pub burned_at: Option<DateTime<Utc>>,
