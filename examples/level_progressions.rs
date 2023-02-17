@@ -1,9 +1,9 @@
 use wanikani_rs::{
     response::{CollectionResponse, LevelProgression, ResourceResponse},
     wanikani_client::WanikaniClient,
-    wrapper::{assignments::AssignmentsFilter, levels::LevelProgressionFilter},
+    wrapper::{levels::LevelProgressionFilter},
 };
-use wanikani_rs_model::assignment::Assignment;
+
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
