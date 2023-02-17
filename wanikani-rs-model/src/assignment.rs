@@ -1,4 +1,4 @@
-use chrono::prelude::*;
+use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::subject_type::SubjectType;
