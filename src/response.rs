@@ -6,36 +6,36 @@ use serde::{Deserialize, Serialize};
 pub struct ReviewStatistic {
     pub created_at: DateTime<Utc>,
     pub hidden: bool,
-    pub meaning_correct: i32,
-    pub meaning_current_streak: i32,
-    pub meaning_incorrect: i32,
-    pub meaning_max_streak: i32,
-    pub percentage_correct: i32,
-    pub reading_correct: i32,
-    pub reading_current_streak: i32,
-    pub reading_incorrect: i32,
-    pub reading_max_streak: i32,
-    pub subject_id: i32,
+    pub meaning_correct: i64,
+    pub meaning_current_streak: i64,
+    pub meaning_incorrect: i64,
+    pub meaning_max_streak: i64,
+    pub percentage_correct: i64,
+    pub reading_correct: i64,
+    pub reading_current_streak: i64,
+    pub reading_incorrect: i64,
+    pub reading_max_streak: i64,
+    pub subject_id: i64,
     pub subject_type: SubjectType,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SrsStage {
-    pub interval: Option<i32>,
+    pub interval: Option<i64>,
     pub interval_unit: Option<String>,
-    pub position: i32,
+    pub position: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SpacedRepetionSystem {
-    pub burning_stage_position: i32,
+    pub burning_stage_position: i64,
     pub created_at: DateTime<Utc>,
     pub description: String,
     pub name: String,
-    pub passing_stage_position: i32,
+    pub passing_stage_position: i64,
     pub stages: Vec<SrsStage>,
-    pub starting_stage_position: i32,
-    pub unlocking_stage_position: i32,
+    pub starting_stage_position: i64,
+    pub unlocking_stage_position: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -45,7 +45,7 @@ pub struct StudyMaterial {
     pub meaning_note: Option<String>,
     pub meaning_synonyms: Vec<String>,
     pub reading_note: Option<String>,
-    pub subject_id: i32,
+    pub subject_id: i64,
     pub subject_type: SubjectType,
 }
 
@@ -77,24 +77,24 @@ pub struct Subject {
     pub created_at: DateTime<Utc>,
     pub document_url: String,
     pub hidden_at: Option<DateTime<Utc>>,
-    pub lesson_position: i32,
-    pub level: i32,
+    pub lesson_position: i64,
+    pub level: i64,
     pub meaning_mnemonic: String,
     pub meanings: Vec<Meaning>,
     pub slug: String,
-    pub spaced_repetition_system_id: i32,
+    pub spaced_repetition_system_id: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SummaryLesson {
     pub available_at: DateTime<Utc>,
-    pub subject_ids: Vec<i32>,
+    pub subject_ids: Vec<i64>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SummaryReview {
     pub available_at: DateTime<Utc>,
-    pub subject_ids: Vec<i32>,
+    pub subject_ids: Vec<i64>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -114,7 +114,7 @@ pub struct VoiceActor {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserSubscription {
     pub active: bool,
-    pub max_level_granted: i32,
+    pub max_level_granted: i64,
     pub period_ends_at: Option<DateTime<Utc>>,
     #[serde(rename = "type")]
     pub kind: String,
@@ -122,9 +122,9 @@ pub struct UserSubscription {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UserPreferences {
-    pub default_voice_actor_id: i32,
+    pub default_voice_actor_id: i64,
     pub lessons_autoplay_audio: bool,
-    pub lessons_batch_size: i32,
+    pub lessons_batch_size: i64,
     pub lessons_presentation_order: String,
     pub reviews_autoplay_audio: bool,
     pub reviews_display_srs_indicator: bool,
@@ -134,7 +134,7 @@ pub struct UserPreferences {
 pub struct User {
     pub id: String,
     pub current_vacation_started_at: Option<DateTime<Utc>>,
-    pub level: i32,
+    pub level: i64,
     pub preferences: UserPreferences,
     pub profile_url: String,
     pub started_at: DateTime<Utc>,
@@ -152,7 +152,7 @@ pub struct UserResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ResourceResponse<T> {
-    pub id: i32,
+    pub id: i64,
     pub object: String,
     pub url: String,
     pub data_updated_at: DateTime<Utc>,
@@ -163,7 +163,7 @@ pub struct ResourceResponse<T> {
 pub struct PagesResponse {
     pub next_url: Option<String>,
     pub previous_url: Option<String>,
-    pub per_page: i32,
+    pub per_page: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -172,6 +172,6 @@ pub struct CollectionResponse<T> {
     pub url: String,
     pub data_updated_at: Option<DateTime<Utc>>,
     pub pages: PagesResponse,
-    pub total_count: i32,
+    pub total_count: i64,
     pub data: Vec<T>,
 }

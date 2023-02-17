@@ -12,7 +12,7 @@ use wanikani_rs_model::reset::Reset;
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ResetFilter {
-    Ids(Vec<i32>),
+    Ids(Vec<i64>),
     UpdatedAfter(DateTime<Utc>),
 }
 
@@ -28,5 +28,5 @@ impl WanikaniClient {
         "resets",
         CollectionResponse<ResourceResponse<Reset>>
     );
-    get!(get_reset, "resets/{id}", ResourceResponse<Reset>, id: i32);
+    get!(get_reset, "resets/{id}", ResourceResponse<Reset>, id: i64);
 }

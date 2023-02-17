@@ -12,9 +12,9 @@ use wanikani_rs_model::review::Review;
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ReviewFilter {
-    AssignmentIds(Vec<i32>),
-    Ids(Vec<i32>),
-    SubjectIds(Vec<i32>),
+    AssignmentIds(Vec<i64>),
+    Ids(Vec<i64>),
+    SubjectIds(Vec<i64>),
     UpdatedAfter(DateTime<Utc>),
 }
 
@@ -34,6 +34,6 @@ impl WanikaniClient {
         get_review,
         "reviews/{id}",
         ResourceResponse<Review>,
-        id: i32
+        id: i64
     );
 }

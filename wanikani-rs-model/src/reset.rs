@@ -5,6 +5,6 @@ use serde::{Deserialize, Serialize};
 pub struct Reset {
     pub confirmed_at: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
-    pub original_level: i32,
-    pub target_level: i32,
+    pub original_level: i64,
+    pub target_level: i64,
 }

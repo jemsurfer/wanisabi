@@ -11,9 +11,9 @@ pub struct Assignment {
     pub hidden: bool,
     pub passed_at: Option<DateTime<Utc>>,
     pub resurrected_at: Option<DateTime<Utc>>,
-    pub srs_stage: i32,
+    pub srs_stage: i64,
     pub started_at: Option<DateTime<Utc>>,
-    pub subject_id: i32,
+    pub subject_id: i64,
     pub subject_type: SubjectType,
     pub unlocked_at: Option<DateTime<Utc>>,
 }
