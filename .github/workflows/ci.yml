@@ -53,7 +53,6 @@ jobs:
           command: clippy
           args: -p wanikani-rs -p wanikani-rs-model --no-default-features --all-targets -- -D warnings
 
-jobs:
   build_and_test:
     name: Rust project - latest
     runs-on: ubuntu-latest
