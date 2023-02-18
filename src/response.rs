@@ -1,42 +1,6 @@
-use chrono::{prelude::DateTime, Utc};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::summary::Summary;
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "snake_case")]
-pub enum AuxiliaryMeaningType {
-    Whitelist,
-    Blacklist,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct AuxiliaryMeaning {
-    pub meaning: String,
-    #[serde(rename = "type")]
-    pub kind: AuxiliaryMeaningType,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Meaning {
-    pub meaning: String,
-    pub primary: bool,
-    pub accepted_answer: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Subject {
-    pub auxiliary_meanings: Vec<AuxiliaryMeaning>,
-    pub characters: String,
-    pub created_at: DateTime<Utc>,
-    pub document_url: String,
-    pub hidden_at: Option<DateTime<Utc>>,
-    pub lesson_position: i64,
-    pub level: i64,
-    pub meaning_mnemonic: String,
-    pub meanings: Vec<Meaning>,
-    pub slug: String,
-    pub spaced_repetition_system_id: i64,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct VoiceActor {

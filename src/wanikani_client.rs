@@ -63,7 +63,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .build()?;
                 req.url_mut().set_query(Some(&qs));
-                return self.client.execute(req).await?.json().await;
+                self.client.execute(req).await?.json().await
             }
         };
     }
