@@ -1,36 +1,5 @@
-use crate::model::subject_type::SubjectType;
 use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SrsStage {
-    pub interval: Option<i64>,
-    pub interval_unit: Option<String>,
-    pub position: i64,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SpacedRepetionSystem {
-    pub burning_stage_position: i64,
-    pub created_at: DateTime<Utc>,
-    pub description: String,
-    pub name: String,
-    pub passing_stage_position: i64,
-    pub stages: Vec<SrsStage>,
-    pub starting_stage_position: i64,
-    pub unlocking_stage_position: i64,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct StudyMaterial {
-    pub created_at: DateTime<Utc>,
-    pub hidden: bool,
-    pub meaning_note: Option<String>,
-    pub meaning_synonyms: Vec<String>,
-    pub reading_note: Option<String>,
-    pub subject_id: i64,
-    pub subject_type: SubjectType,
-}
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
