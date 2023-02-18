@@ -1,5 +1,6 @@
 use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use wanikani_rs_model::summary::Summary;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
@@ -35,25 +36,6 @@ pub struct Subject {
     pub meanings: Vec<Meaning>,
     pub slug: String,
     pub spaced_repetition_system_id: i64,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SummaryLesson {
-    pub available_at: DateTime<Utc>,
-    pub subject_ids: Vec<i64>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SummaryReview {
-    pub available_at: DateTime<Utc>,
-    pub subject_ids: Vec<i64>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Summary {
-    pub lessons: Vec<SummaryLesson>,
-    pub next_reviews_at: Option<DateTime<Utc>>,
-    pub reviews: Vec<SummaryReview>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -100,6 +82,14 @@ pub struct UserResponse {
     pub url: String,
     pub data_updated_at: DateTime<Utc>,
     pub data: User,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SummaryResponse {
+    pub object: String,
+    pub url: String,
+    pub data_updated_at: DateTime<Utc>,
+    pub data: Summary,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
