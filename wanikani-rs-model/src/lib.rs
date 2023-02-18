@@ -8,3 +8,4 @@ pub mod study_material;
 pub mod subject;
 pub mod subject_type;
 pub mod summary;
+pub mod voice_actor;
