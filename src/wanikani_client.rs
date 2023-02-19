@@ -45,7 +45,7 @@ pub mod macros {
 
     #[macro_export]
     macro_rules! post {
-        ($name:tt, $route:expr, $body:ty, $return:ty) => {
+        ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
             pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
                 let req = self
                     .client
