@@ -18,6 +18,7 @@ pub enum ReviewFilter {
     UpdatedAfter(DateTime<Utc>),
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct ReviewCreate {
     pub assignment_id: i64,
     pub subject_id: i64,
