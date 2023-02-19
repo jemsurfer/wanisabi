@@ -17,33 +17,8 @@ pub struct QP<T: DeserializeOwned + Serialize>(#[serde_as(as = "EnumMap")] pub V
 pub mod macros {
     #[macro_export]
     macro_rules! get {
-        ($name:tt, $route:expr, $return:ty) => {
-            pub async fn $name(&self) -> Result<$return, Error> {
-                let url = format!("https://api.wanikani.com/v2/{}", $route);
-                let req = self
-                    .client
-                    .get(url)
-                    .bearer_auth(self.key.to_owned());
-                req.send().await?.json().await
-            }
-        };
-
-        ($name:tt, $route:expr, $query:ty, $return:ty) => {
-            pub async fn $name(&self, query: Vec<$query>) -> Result<$return, Error> {
-                let qp: QP<$query> = QP(query);
-                let qs = qs::to_string(&qp).unwrap();
-                let url = format!("https://api.wanikani.com/v2/{}", $route);
-                let mut req = self
-                    .client
-                    .get(url)
-                    .bearer_auth(self.key.to_owned())
-                    .build()?;
-                req.url_mut().set_query(Some(&qs));
-                return self.client.execute(req).await?.json().await;
-            }
-        };
-        ($name:tt, $route:expr, $return:ty, $($v:tt: $t:ty)+) => {
-            pub async fn $name(&self $(, $v: $t)+) -> Result<$return, Error> {
+        ($name:tt, $route:expr, $return:ty $(, $v:tt: $t:ty)*) => {
+            pub async fn $name(&self $(, $v: $t)*) -> Result<$return, Error> {
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
                 let req = self
                     .client
@@ -52,8 +27,8 @@ pub mod macros {
                 req.send().await?.json().await
             }
         };
-        ($name:tt, $route:expr, $query:ty, $return:ty, $($v:tt: $t:ty)+) => {
-            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)+) -> Result<$return, Error> {
+        ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
+            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, Error> {
                 let qp: QP<$query> = QP(query);
                 let qs = qs::to_string(&qp).unwrap();
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
@@ -71,11 +46,26 @@ pub mod macros {
     #[macro_export]
     macro_rules! post {
         ($name:tt, $route:expr, $body:ty, $return:ty) => {
-            pub async fn $name(&self, body: $body) -> Result<$return, Error> {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
                 let req = self
                     .client
-                    .post("https://api.wanikani.com/v2/".to_owned() + $route)
-                    .bearer_auth(self.key.to_owned());
+                    .post("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
+                    .bearer_auth(self.key.to_owned())
+                    .json(body);
+                req.send().await?.json().await
+            }
+        };
+    }
+
+    #[macro_export]
+    macro_rules! put {
+        ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
+                let req = self
+                    .client
+                    .put("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
+                    .bearer_auth(self.key.to_owned())
+                    .json(body);
                 req.send().await?.json().await
             }
         };
