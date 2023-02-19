@@ -1,5 +1,5 @@
 use crate::{
-    get,
+    get, put,
     response::{CollectionResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
     wanikani_client::QP,
@@ -29,6 +29,11 @@ pub enum AssignmentsFilter {
     UpdatedAfter(DateTime<Utc>),
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct StartAssignment {
+    pub started_at: Option<DateTime<Utc>>,
+}
+
 impl WanikaniClient {
     get!(
         get_assignments_filtered,
@@ -44,6 +49,13 @@ impl WanikaniClient {
     get!(
         get_assignment,
         "assignments/{id}",
+        ResourceResponse<Assignment>,
+        id: i64
+    );
+    put!(
+        start_assignment,
+        "assignments/{id}/start",
+        StartAssignment,
         ResourceResponse<Assignment>,
         id: i64
     );
