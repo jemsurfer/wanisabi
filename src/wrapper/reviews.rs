@@ -1,5 +1,5 @@
 use crate::{
-    get,
+    get, post,
     response::{CollectionResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
     wanikani_client::QP,
@@ -16,6 +16,14 @@ pub enum ReviewFilter {
     Ids(Vec<i64>),
     SubjectIds(Vec<i64>),
     UpdatedAfter(DateTime<Utc>),
+}
+
+pub struct ReviewCreate {
+    pub assignment_id: i64,
+    pub subject_id: i64,
+    pub incorrect_meaning_answers: i64,
+    pub incorrect_reading_answers: i64,
+    pub created_at: Option<DateTime<Utc>>,
 }
 
 impl WanikaniClient {
@@ -35,5 +43,11 @@ impl WanikaniClient {
         "reviews/{id}",
         ResourceResponse<Review>,
         id: i64
+    );
+    post!(
+        create_review,
+        "reviews",
+        ReviewCreate,
+        ResourceResponse<Review>
     );
 }
