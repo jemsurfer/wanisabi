@@ -80,6 +80,20 @@ pub mod macros {
             }
         };
     }
+
+    #[macro_export]
+    macro_rules! put {
+        ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
+                let req = self
+                    .client
+                    .put("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
+                    .bearer_auth(self.key.to_owned())
+                    .json(body);
+                req.send().await?.json().await
+            }
+        };
+    }
 }
 impl WanikaniClient {
     pub fn new(key: String) -> Self {
