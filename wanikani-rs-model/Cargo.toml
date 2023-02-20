@@ -2,7 +2,12 @@
 name = "wanikani-rs-model"
 version = "0.1.0"
 edition = "2021"
-
+description = "Model for wanikani-rs"
+homepage = "https://github.com/gitbluub/wanikani-rs"
+repository = "https://github.com/gitbluub/wanikani-rs"
+keywords = ["api", "wanikani"]
+categories = ["api-bindings"]
+readme = "../README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
