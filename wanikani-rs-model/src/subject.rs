@@ -115,7 +115,7 @@ pub struct PronunciationAudioMetadata {
     pub pronunciation: String,
     pub voice_actor_id: i64,
     pub voice_actor_name: String,
-    pub voice_actor_description: String,
+    pub voice_description: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
