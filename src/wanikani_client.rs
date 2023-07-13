@@ -1,7 +1,6 @@
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use std::env;
-
 use serde_with::EnumMap;
 use std::fmt::Debug;
 #[derive(Clone, Debug)]
@@ -30,7 +29,27 @@ pub mod macros {
         ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
             pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, Error> {
                 let qp: QP<$query> = QP(query);
+                let re = regex::Regex::new(r"\[\d+\]").unwrap();
                 let qs = qs::to_string(&qp).unwrap();
+                let qs = re.replace_all(qs.as_str(), "");
+                let mut q_map: std::collections::HashMap<String, String> = std::collections::HashMap::new();
+                for q in qs.split("&") {
+                    let mut item = q.split("=");
+                    let k = item.next().unwrap();
+                    let v = item.next().unwrap_or("");
+
+                    if q_map.contains_key(&k.to_string()) {
+                        q_map.insert(k.to_string(), format!("{},{}", q_map.get(&k.to_string()).unwrap(), v));
+                    } else {
+                        q_map.insert(k.to_string(),v.to_string());
+                    }
+                }
+                let mut queries: Vec<String> = vec![];
+                for (k,v) in q_map {
+                    queries.push(format!("{}={}",k,v));
+                }
+                let qs = queries.join("&");
+
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
                 let mut req = self
                     .client
