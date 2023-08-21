@@ -11,7 +11,7 @@ async fn main() -> Result<(), reqwest::Error> {
     let params = vec![
         //AssignmentsFilter::Burned(true),
         //AssignmentsFilter::Levels(vec![1]),
-        AssignmentsFilter::ImmediatelyAvailableForLessons(()),
+        AssignmentsFilter::ImmediatelyAvailableForLessons,
         //AssignmentsFilter::AvailableAfter(chrono::offset::Utc::now()),
         //AssignmentsFilter::Hidden(false),
     ];
