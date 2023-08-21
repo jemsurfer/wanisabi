@@ -13,7 +13,7 @@ An API wrapper for the [wanikani API](https://wanikani.com/api) written in rust.
 async fn main() -> Result<(), reqwest::Error> {
     let client = WanikaniClient::new("<WANIKANI_API_KEY>");
     let params = vec![
-        AssignmentsFilter::ImmediatelyAvailableForLessons(()),
+        AssignmentsFilter::ImmediatelyAvailableForLessons,
     ];
 
     let assignments = client.get_assignments_filtered(params).await?;
