@@ -3,9 +3,9 @@ name = "wanikani-rs"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-description = "Rust binding for the wanikani API"
-homepage = "https://github.com/gitbluub/wanikani-rs"
-repository = "https://github.com/gitbluub/wanikani-rs"
+description = "Rust binding for the wanikani API. Forked as upstream is outdated"
+homepage = "https://github.com/jemsurfer/wanikani-rs"
+repository = "https://github.com/jemsurfer/wanikani-rs"
 keywords = ["api", "wanikani"]
 categories = ["api-bindings"]
 #
