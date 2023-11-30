@@ -9,7 +9,7 @@ use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::assignment::Assignment;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum AssignmentsFilter {
     AvailableAfter(DateTime<Utc>),
@@ -29,7 +29,7 @@ pub enum AssignmentsFilter {
     UpdatedAfter(DateTime<Utc>),
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct StartAssignment {
     pub started_at: Option<DateTime<Utc>>,
 }

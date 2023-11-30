@@ -9,7 +9,7 @@ use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::review_statistic::ReviewStatistic;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum ReviewStatisticFilter {
     Hidden(bool),

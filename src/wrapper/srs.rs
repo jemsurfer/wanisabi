@@ -9,7 +9,7 @@ use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::spaced_repetition_system::SpacedRepetitionSystem;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum SpacedRepetitionSystemFilter {
     Ids(Vec<i64>),

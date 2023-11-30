@@ -9,7 +9,7 @@ use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::level_progression::LevelProgression;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum LevelProgressionFilter {
     Ids(Vec<i64>),

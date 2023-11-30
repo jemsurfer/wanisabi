@@ -9,7 +9,7 @@ use reqwest::Error;
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::{study_material::StudyMaterial, subject_type::SubjectType};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum StudyMaterialFilter {
     Hidden(bool),

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{get, wanikani_client::WanikaniClient};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserPreferencesUpdate {
     pub default_voice_actor_id: Option<i64>,
     pub lessons_autoplay_audio: Option<bool>,
@@ -14,12 +14,12 @@ pub struct UserPreferencesUpdate {
     pub reviews_display_srs_indicator: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserInnerUpdate {
     pub preferences: UserPreferencesUpdate,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserUpdate {
     pub user: UserInnerUpdate,
 }

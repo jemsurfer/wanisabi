@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::{summary::Summary, user::User};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserResponse {
     pub object: String,
     pub url: String,
@@ -10,7 +10,7 @@ pub struct UserResponse {
     pub data: User,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SummaryResponse {
     pub object: String,
     pub url: String,
