@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::subject_type::SubjectType;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct StudyMaterial {
     pub created_at: DateTime<Utc>,
     pub hidden: bool,

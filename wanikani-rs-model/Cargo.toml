@@ -2,9 +2,9 @@
 name = "wanikani-rs-model"
 version = "0.1.1"
 edition = "2021"
-description = "Model for wanikani-rs: Forked as upstream outdated"
-homepage = "https://github.com/jemsurfer/wanikani-rs"
-repository = "https://github.com/jemsurfer/wanikani-rs"
+description = "Model for wanikani-rs"
+homepage = "https://github.com/gitbluub/wanikani-rs"
+repository = "https://github.com/gitbluub/wanikani-rs"
 keywords = ["api", "wanikani"]
 categories = ["api-bindings"]
 readme = "../README.md"

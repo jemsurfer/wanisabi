@@ -1,7 +1,7 @@
 use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct Review {
     pub assignment_id: i64,
     pub created_at: DateTime<Utc>,

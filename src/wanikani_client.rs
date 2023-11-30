@@ -1,7 +1,7 @@
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
-use std::env;
 use serde_with::EnumMap;
+use std::env;
 use std::fmt::Debug;
 #[derive(Clone, Debug)]
 pub struct WanikaniClient {

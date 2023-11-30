@@ -1,21 +1,21 @@
 use chrono::{prelude::DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum AuxiliaryMeaningType {
     Whitelist,
     Blacklist,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AuxiliaryMeaning {
     pub meaning: String,
     #[serde(rename = "type")]
     pub kind: AuxiliaryMeaningType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum ReadingType {
     Kunyomi,
@@ -23,14 +23,14 @@ pub enum ReadingType {
     Onyomi,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Meaning {
     pub meaning: String,
     pub primary: bool,
     pub accepted_answer: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CharacterImageMetadata {
     pub inline_styles: Option<bool>,
     pub color: Option<String>,
@@ -38,14 +38,14 @@ pub struct CharacterImageMetadata {
     pub style_name: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CharacterImage {
     pub url: String,
     pub content_type: String,
     pub metadata: CharacterImageMetadata,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SubjectRadical {
     pub auxiliary_meanings: Vec<AuxiliaryMeaning>,
     pub characters: Option<String>,
@@ -62,7 +62,7 @@ pub struct SubjectRadical {
     pub character_images: Vec<CharacterImage>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Reading {
     pub reading: String,
     pub primary: bool,
@@ -71,14 +71,14 @@ pub struct Reading {
     pub kind: ReadingType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct VocabularyReading {
     pub reading: String,
     pub primary: bool,
     pub accepted_answer: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SubjectKanji {
     pub auxiliary_meanings: Vec<AuxiliaryMeaning>,
     pub characters: String,
@@ -100,7 +100,7 @@ pub struct SubjectKanji {
     pub visually_similar_subject_ids: Vec<i64>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Sentence {
     #[serde(rename = "en")]
     english: String,
@@ -108,7 +108,7 @@ pub struct Sentence {
     japanese: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PronunciationAudioMetadata {
     pub gender: String,
     pub source_id: i64,
@@ -118,14 +118,14 @@ pub struct PronunciationAudioMetadata {
     pub voice_description: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PronunciationAudio {
     pub url: String,
     pub content_type: String,
     pub metadata: PronunciationAudioMetadata,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SubjectVocabulary {
     pub auxiliary_meanings: Vec<AuxiliaryMeaning>,
     pub characters: String,
@@ -146,8 +146,7 @@ pub struct SubjectVocabulary {
     pub reading_mnemonic: String,
 }
 
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SubjectKanaVocabulary {
     pub context_sentences: Vec<Sentence>,
     pub meaning_mnemonic: String,
@@ -165,7 +164,7 @@ pub struct SubjectKanaVocabulary {
     pub spaced_repetition_system_id: i64,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(untagged)]
 pub enum Subject {
     Radical(SubjectRadical),

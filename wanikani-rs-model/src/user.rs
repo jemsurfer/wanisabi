@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserSubscription {
     pub active: bool,
     pub max_level_granted: i64,
@@ -10,7 +10,7 @@ pub struct UserSubscription {
     pub kind: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserPreferences {
     pub default_voice_actor_id: i64,
     pub lessons_autoplay_audio: bool,
@@ -20,7 +20,7 @@ pub struct UserPreferences {
     pub reviews_display_srs_indicator: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct User {
     pub id: String,
     pub current_vacation_started_at: Option<DateTime<Utc>>,
