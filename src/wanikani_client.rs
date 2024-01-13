@@ -64,6 +64,19 @@ pub mod macros {
 
     #[macro_export]
     macro_rules! post {
+        ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper: ident, $attr: ident $(,$v:tt: $t:ty)*) => {
+            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, Error> {
+                let wrapped = $wrapper{
+                    $attr: body
+                };
+                let req = self
+                    .client
+                    .post("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
+                    .bearer_auth(self.key.to_owned())
+                    .json(&wrapped);
+                req.send().await?.json().await
+            }
+        };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
             pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
                 let req = self
@@ -75,9 +88,21 @@ pub mod macros {
             }
         };
     }
-
     #[macro_export]
     macro_rules! put {
+        ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper:ident, $attr: ident $(,$v:tt: $t:ty)*) => {
+            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, Error> {
+                let wrapped = $wrapper{
+                    $attr: body,
+                };
+                let req = self
+                    .client
+                    .put("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
+                    .bearer_auth(self.key.to_owned())
+                    .json(&wrapped);
+                req.send().await?.json().await
+            }
+        };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
             pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
                 let req = self

@@ -19,7 +19,7 @@ pub enum StudyMaterialFilter {
     UpdatedAfter(DateTime<Utc>),
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct StudyMaterialCreate {
     pub subjet_id: i64,
     pub meaning_note: Option<String>,
@@ -27,11 +27,21 @@ pub struct StudyMaterialCreate {
     pub meaning_synonyms: Option<Vec<String>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
+struct StudyMaterialCreateWrapper {
+    study_material: StudyMaterialCreate,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct StudyMaterialUpdate {
     pub meaning_note: Option<String>,
     pub reading_note: Option<String>,
     pub meaning_synonyms: Option<Vec<String>>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct StudyMaterialUpdateWrapper {
+    study_material: StudyMaterialUpdate,
 }
 
 impl WanikaniClient {
@@ -56,13 +66,17 @@ impl WanikaniClient {
         create_study_material,
         "study_materials/",
         StudyMaterialCreate,
-        ResourceResponse<StudyMaterial>
+        ResourceResponse<StudyMaterial>,
+        StudyMaterialCreateWrapper,
+        study_material
     );
     put!(
         update_study_material,
         "study_materials/{id}",
         StudyMaterialUpdate,
         ResourceResponse<StudyMaterial>,
+        StudyMaterialUpdateWrapper,
+        study_material,
         id: i64
     );
 }

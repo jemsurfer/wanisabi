@@ -20,11 +20,15 @@ pub enum ReviewFilter {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ReviewCreate {
-    pub assignment_id: i64,
     pub subject_id: i64,
     pub incorrect_meaning_answers: i64,
     pub incorrect_reading_answers: i64,
     pub created_at: Option<DateTime<Utc>>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+struct ReviewWrapper {
+    review: ReviewCreate,
 }
 
 impl WanikaniClient {
@@ -49,6 +53,8 @@ impl WanikaniClient {
         create_review,
         "reviews",
         ReviewCreate,
-        ResourceResponse<Review>
+        ResourceResponse<Review>,
+        ReviewWrapper,
+        review
     );
 }
