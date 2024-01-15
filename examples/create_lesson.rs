@@ -1,10 +1,12 @@
+use chrono::Utc;
 use text_io::read;
 use wana_kana::ConvertJapanese;
 use wanikani_rs::{
     wanikani_client::WanikaniClient,
-    wrapper::{assignments::AssignmentsFilter, reviews::ReviewCreate},
+    wrapper::assignments::{AssignmentsFilter, StartAssignment},
 };
 use wanikani_rs_model::subject::{Meaning, Subject::*};
+
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
     let client = WanikaniClient::default();
@@ -17,7 +19,7 @@ async fn main() -> Result<(), reqwest::Error> {
         .get_subject(first_lesson_assignment.data.subject_id)
         .await?
         .data;
-    let r = match lesson_subj {
+    match lesson_subj {
         Radical(r) => {
             println!(
                 "Radical {:?}: 
@@ -26,13 +28,7 @@ async fn main() -> Result<(), reqwest::Error> {
         ",
                 r.characters, r.meanings, r.meaning_mnemonic
             );
-            let (m, r) = meaning_reading(r.meanings, vec![]);
-            ReviewCreate {
-                subject_id: first_lesson_assignment.data.subject_id,
-                incorrect_meaning_answers: m,
-                incorrect_reading_answers: 0,
-                created_at: Some(chrono::Utc::now()),
-            }
+            meaning_reading(r.meanings, vec![]);
         }
         Kanji(k) => {
             println!(
@@ -44,16 +40,10 @@ async fn main() -> Result<(), reqwest::Error> {
                      ",
                 k.characters, k.meanings, k.meaning_mnemonic, k.readings, k.reading_mnemonic
             );
-            let (m, r) = meaning_reading(
+            meaning_reading(
                 k.meanings,
                 k.readings.iter().map(|x| x.reading.clone()).collect(),
             );
-            ReviewCreate {
-                subject_id: first_lesson_assignment.data.subject_id,
-                incorrect_meaning_answers: m,
-                incorrect_reading_answers: r,
-                created_at: ,
-            }
         }
         Vocabulary(v) => {
             println!(
@@ -66,12 +56,10 @@ async fn main() -> Result<(), reqwest::Error> {
             ",
                 v.characters, v.meanings, v.meaning_mnemonic, v.readings, v.reading_mnemonic
             );
-            ReviewCreate {
-                subject_id: todo!(),
-                incorrect_meaning_answers: todo!(),
-                incorrect_reading_answers: todo!(),
-                created_at: todo!(),
-            }
+            meaning_reading(
+                v.meanings,
+                v.readings.iter().map(|x| x.reading.clone()).collect(),
+            );
         }
         KanaVocabulary(kv) => {
             println!(
@@ -80,14 +68,17 @@ async fn main() -> Result<(), reqwest::Error> {
                      Meaning Mnemonic: {}",
                 kv.characters, kv.meanings, kv.meaning_mnemonic
             );
-            ReviewCreate {
-                subject_id: todo!(),
-                incorrect_meaning_answers: todo!(),
-                incorrect_reading_answers: todo!(),
-                created_at: todo!(),
-            }
+            meaning_reading(kv.meanings, vec![]);
         }
     };
+    client
+        .start_assignment(
+            &StartAssignment {
+                started_at: Some(Utc::now()),
+            },
+            first_lesson_assignment.id,
+        )
+        .await?;
     Ok(())
 }
 
