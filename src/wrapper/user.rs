@@ -1,5 +1,8 @@
-use crate::{put, response::UserResponse};
-use reqwest::Error;
+use crate::{
+    put,
+    response::{ErrorResponse, UserResponse, WanikaniError},
+};
+
 use serde::{Deserialize, Serialize};
 
 use crate::{get, wanikani_client::WanikaniClient};

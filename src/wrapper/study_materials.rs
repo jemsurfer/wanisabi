@@ -1,11 +1,11 @@
 use crate::{
     get, post, put,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, ErrorResponse, ResourceResponse, WanikaniError},
     wanikani_client::WanikaniClient,
     wanikani_client::QP,
 };
 use chrono::{DateTime, Utc};
-use reqwest::Error;
+
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::{study_material::StudyMaterial, subject_type::SubjectType};
 
@@ -19,7 +19,7 @@ pub enum StudyMaterialFilter {
     UpdatedAfter(DateTime<Utc>),
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StudyMaterialCreate {
     pub subjet_id: i64,
     pub meaning_note: Option<String>,
@@ -32,7 +32,7 @@ struct StudyMaterialCreateWrapper {
     study_material: StudyMaterialCreate,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StudyMaterialUpdate {
     pub meaning_note: Option<String>,
     pub reading_note: Option<String>,

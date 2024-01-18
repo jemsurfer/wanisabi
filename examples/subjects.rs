@@ -1,11 +1,11 @@
 use wanikani_rs::{
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, ErrorResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
 };
 use wanikani_rs_model::subject::Subject;
 
 #[tokio::main]
-async fn main() -> Result<(), reqwest::Error> {
+async fn main() -> Result<(), ErrorResponse> {
     let client = WanikaniClient::default();
     let params = vec![];
 

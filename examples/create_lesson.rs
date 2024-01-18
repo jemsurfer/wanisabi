@@ -2,13 +2,14 @@ use chrono::Utc;
 use text_io::read;
 use wana_kana::ConvertJapanese;
 use wanikani_rs::{
+    response::ErrorResponse,
     wanikani_client::WanikaniClient,
     wrapper::assignments::{AssignmentsFilter, StartAssignment},
 };
 use wanikani_rs_model::subject::{Meaning, Subject::*};
 
 #[tokio::main]
-async fn main() -> Result<(), reqwest::Error> {
+async fn main() -> Result<(), ErrorResponse> {
     let client = WanikaniClient::default();
     let first_lesson_assignment = client
         .get_assignments_filtered(vec![AssignmentsFilter::ImmediatelyAvailableForLessons])

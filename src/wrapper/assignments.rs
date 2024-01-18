@@ -1,11 +1,10 @@
 use crate::{
     get, put,
-    response::{CollectionResponse, ResourceResponse},
-    wanikani_client::WanikaniClient,
-    wanikani_client::QP,
+    response::{CollectionResponse, ErrorResponse, ResourceResponse, WanikaniError},
+    wanikani_client::{WanikaniClient, QP},
 };
 use chrono::{DateTime, Utc};
-use reqwest::Error;
+
 use serde::{Deserialize, Serialize};
 use wanikani_rs_model::assignment::Assignment;
 
