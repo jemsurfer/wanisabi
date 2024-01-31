@@ -1,12 +1,12 @@
-use wanikani_rs::{
-    response::{CollectionResponse, ErrorResponse, ResourceResponse},
+use wanisabi::{
+    response::{CollectionResponse, Error, ResourceResponse},
     wanikani_client::WanikaniClient,
     wrapper::level_progressions::LevelProgressionFilter,
 };
-use wanikani_rs_model::level_progression::LevelProgression;
+use wanisabi_model::level_progression::LevelProgression;
 
 #[tokio::main]
-async fn main() -> Result<(), ErrorResponse> {
+async fn main() -> Result<(), Error> {
     let client = WanikaniClient::default();
     let params = vec![LevelProgressionFilter::Ids(vec![1, 2])];
 

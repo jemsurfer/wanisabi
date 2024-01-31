@@ -3,8 +3,8 @@
 [![Crate version](https://img.shields.io/crates/v/wanikani-rs)](https://crates.io/crates/wanikani-rs)
 
 # wanikani-rs
-An API wrapper for the [wanikani API](https://wanikani.com/api) written in rust.
 
+An API wrapper for the [wanikani API](https://docs.api.wanikani.com/) written in rust.
 
 ## Usage/Examples
 
@@ -19,10 +19,3 @@ async fn main() -> Result<(), reqwest::Error> {
     let assignments = client.get_assignments_filtered(params).await?;
 }
 ```
-
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
-

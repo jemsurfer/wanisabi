@@ -1,12 +1,12 @@
 use crate::{
     get, put,
-    response::{CollectionResponse, ErrorResponse, ResourceResponse, WanikaniError},
+    response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
     wanikani_client::{WanikaniClient, QP},
 };
 use chrono::{DateTime, Utc};
 
 use serde::{Deserialize, Serialize};
-use wanikani_rs_model::assignment::Assignment;
+use wanisabi_model::assignment::Assignment;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]

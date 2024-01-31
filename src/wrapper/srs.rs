@@ -1,13 +1,13 @@
 use crate::{
     get,
-    response::{CollectionResponse, ErrorResponse, ResourceResponse, WanikaniError},
+    response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
     wanikani_client::WanikaniClient,
     wanikani_client::QP,
 };
 use chrono::{DateTime, Utc};
 
 use serde::{Deserialize, Serialize};
-use wanikani_rs_model::spaced_repetition_system::SpacedRepetitionSystem;
+use wanisabi_model::spaced_repetition_system::SpacedRepetitionSystem;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "snake_case")]

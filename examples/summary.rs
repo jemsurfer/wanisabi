@@ -1,7 +1,7 @@
-use wanikani_rs::{response::ErrorResponse, wanikani_client::WanikaniClient};
+use wanisabi::{response::Error, wanikani_client::WanikaniClient};
 
 #[tokio::main]
-async fn main() -> Result<(), ErrorResponse> {
+async fn main() -> Result<(), Error> {
     let client = WanikaniClient::default();
     let resp = client.get_summary().await?;
     println!("{:#?}", resp);

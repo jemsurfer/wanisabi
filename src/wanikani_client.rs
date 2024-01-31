@@ -23,7 +23,7 @@ pub mod macros {
     #[macro_export]
     macro_rules! get {
         ($name:tt, $route:expr, $return:ty $(, $v:tt: $t:ty)*) => {
-            pub async fn $name(&self $(, $v: $t)*) -> Result<$return, ErrorResponse> {
+            pub async fn $name(&self $(, $v: $t)*) -> Result<$return, Error> {
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
                 let req = self
                     .client
@@ -33,12 +33,12 @@ pub mod macros {
                 if let Ok(res) = serde_json::from_str::<$return>(&res){
                     return Ok(res);
                 } else {
-                    return Err(ErrorResponse::WanikaniError(serde_json::from_str::<WanikaniError>(&res)?));
+                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
                 }
             }
         };
         ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
-            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, ErrorResponse> {
+            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, Error> {
                 let qp: QP<$query> = QP(query);
                 let re = regex::Regex::new(r"\[\d+\]").unwrap();
                 let qs = qs::to_string(&qp).unwrap();
@@ -72,7 +72,7 @@ pub mod macros {
                 if let Ok(res) = serde_json::from_str::<$return>(&res){
                     return Ok(res);
                 } else {
-                    return Err(ErrorResponse::WanikaniError(serde_json::from_str::<WanikaniError>(&res)?));
+                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
                 }
             }
         };
@@ -81,7 +81,7 @@ pub mod macros {
     #[macro_export]
     macro_rules! post {
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper: ident, $attr: ident $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, ErrorResponse> {
+            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, Error> {
                 let wrapped = $wrapper{
                     $attr: body
                 };
@@ -94,13 +94,13 @@ pub mod macros {
                 if let Ok(res) = serde_json::from_str::<$return>(&res){
                     return Ok(res);
                 } else {
-                    return Err(ErrorResponse::WanikaniError(serde_json::from_str::<WanikaniError>(&res)?));
+                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
                 }
 
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, ErrorResponse> {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
                 let req = self
                     .client
                     .post("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
@@ -110,7 +110,7 @@ pub mod macros {
                 if let Ok(res) = serde_json::from_str::<$return>(&res){
                     return Ok(res);
                 } else {
-                    return Err(ErrorResponse::WanikaniError(serde_json::from_str::<WanikaniError>(&res)?));
+                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
                 }
             }
         };
@@ -118,7 +118,7 @@ pub mod macros {
     #[macro_export]
     macro_rules! put {
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper:ident, $attr: ident $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, ErrorResponse> {
+            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, Error> {
                 let wrapped = $wrapper{
                     $attr: body,
                 };
@@ -131,12 +131,12 @@ pub mod macros {
                 if let Ok(res) = serde_json::from_str::<$return>(&res){
                     return Ok(res);
                 } else {
-                    return Err(ErrorResponse::WanikaniError(serde_json::from_str::<WanikaniError>(&res)?));
+                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
                 }
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, ErrorResponse> {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
                 let req = self
                     .client
                     .put("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
@@ -146,7 +146,7 @@ pub mod macros {
                 if let Ok(res) = serde_json::from_str::<$return>(&res){
                     return Ok(res);
                 } else {
-                    return Err(ErrorResponse::WanikaniError(serde_json::from_str::<WanikaniError>(&res)?));
+                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
                 }
             }
         };

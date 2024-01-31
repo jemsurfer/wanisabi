@@ -1,6 +1,6 @@
 use crate::{
     get,
-    response::{ErrorResponse, SummaryResponse, WanikaniError},
+    response::{Error, SummaryResponse, WanikaniError},
     wanikani_client::WanikaniClient,
 };
 

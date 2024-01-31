@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::{error::Error, fmt};
-use wanikani_rs_model::{summary::Summary, user::User};
+use std::fmt::{Display, Formatter, Result};
+use wanisabi_model::{summary::Summary, user::User};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserResponse {
@@ -52,38 +52,36 @@ pub struct WanikaniError {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum ErrorResponse {
-    WanikaniError(WanikaniError),
-    ReqwestError(String),
-    DeserializationError(String),
+pub enum Error {
+    Wanikani(WanikaniError),
+    Reqwest(String),
+    Deserialization(String),
 }
 
-impl fmt::Display for ErrorResponse {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Display for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
-            ErrorResponse::WanikaniError(e) => {
-                write!(f, "Error from wanikani: {} (Code {})", e.error, e.code)
+            Error::Wanikani(e) => {
+                write!(f, "Wanikani error: {} (Code {})", e.error, e.code)
             }
-            ErrorResponse::ReqwestError(e) => {
-                write!(f, "Error from reqwest: {e}")
+            Error::Reqwest(e) => {
+                write!(f, "Reqwest error: {e}")
             }
-            ErrorResponse::DeserializationError(e) => {
+            Error::Deserialization(e) => {
                 write!(f, "Error deserializing response: {e}")
             }
         }
     }
 }
 
-impl Error for ErrorResponse {}
-
-impl From<reqwest::Error> for ErrorResponse {
+impl From<reqwest::Error> for Error {
     fn from(value: reqwest::Error) -> Self {
-        Self::ReqwestError(value.to_string())
+        Self::Reqwest(value.to_string())
     }
 }
 
-impl From<serde_json::Error> for ErrorResponse {
+impl From<serde_json::Error> for Error {
     fn from(value: serde_json::Error) -> Self {
-        Self::DeserializationError(value.to_string())
+        Self::Deserialization(value.to_string())
     }
 }

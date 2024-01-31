@@ -1,11 +1,11 @@
 [package]
-name = "wanikani-rs-model"
+name = "wanisabi-model"
 version = "0.1.1"
 edition = "2021"
-description = "Model for wanikani-rs"
-homepage = "https://github.com/gitbluub/wanikani-rs"
-repository = "https://github.com/gitbluub/wanikani-rs"
-keywords = ["api", "wanikani"]
+description = "Model for wanisabi"
+homepage = "https://github.com/jemsurfer/wanisabi"
+repository = "https://github.com/jemsurfer/wanisabi/tree/main/wanisabi-model"
+keywords = ["api", "wanikani", "wrapper"]
 categories = ["api-bindings"]
 readme = "../README.md"
 license = "MIT"

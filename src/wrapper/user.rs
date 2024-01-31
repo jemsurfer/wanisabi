@@ -1,6 +1,6 @@
 use crate::{
     put,
-    response::{ErrorResponse, UserResponse, WanikaniError},
+    response::{Error, UserResponse, WanikaniError},
 };
 
 use serde::{Deserialize, Serialize};

@@ -1,11 +1,11 @@
-use wanikani_rs::{
-    response::{CollectionResponse, ErrorResponse, ResourceResponse},
+use wanisabi::{
+    response::{CollectionResponse, Error, ResourceResponse},
     wanikani_client::WanikaniClient,
 };
-use wanikani_rs_model::review::Review;
+use wanisabi_model::review::Review;
 
 #[tokio::main]
-async fn main() -> Result<(), ErrorResponse> {
+async fn main() -> Result<(), Error> {
     let client = WanikaniClient::default();
     let params = vec![];
 
