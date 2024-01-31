@@ -1,8 +1,8 @@
-[![Continuous Integration](https://github.com/GitBluub/wanikani-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/GitBluub/wanikani-rs/actions/workflows/ci.yml)
+[![Continuous Integration](https://github.com/jemsurfer/wanisabi/actions/workflows/rust.yml/badge.svg)](https://github.com/jemsurfer/wanisabi/actions/workflows/rust.yml)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Crate version](https://img.shields.io/crates/v/wanikani-rs)](https://crates.io/crates/wanikani-rs)
+[![Crate version](https://img.shields.io/crates/v/wanisabi)](https://crates.io/crates/wanisabi)
 
-# wanikani-rs
+# Wanisabi
 
 An API wrapper for the [wanikani API](https://docs.api.wanikani.com/) written in rust.
 
