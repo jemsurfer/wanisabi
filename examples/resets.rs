@@ -1,11 +1,11 @@
 use wanisabi::{
-    response::{CollectionResponse, Error, ResourceResponse},
+    response::{CollectionResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
 };
 use wanisabi_model::reset::Reset;
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn main() -> Result<(), wanisabi::Error> {
     let client = WanikaniClient::default();
     let params = vec![];
 

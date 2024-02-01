@@ -1,10 +1,10 @@
 use wanisabi::{
-    response::{Error, UserResponse},
+    response::{UserResponse},
     wanikani_client::WanikaniClient,
 };
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn main() -> Result<(), wanisabi::Error> {
     let client = WanikaniClient::default();
     let resp: UserResponse = client.get_user_info().await?;
     println!("{:#?}", resp);

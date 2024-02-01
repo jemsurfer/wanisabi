@@ -1,12 +1,12 @@
 use wanisabi::{
-    response::{CollectionResponse, Error, ResourceResponse},
+    response::{CollectionResponse, ResourceResponse},
     wanikani_client::WanikaniClient,
     wrapper::assignments::AssignmentsFilter,
 };
 use wanisabi_model::assignment::Assignment;
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn main() -> Result<(), wanisabi::Error> {
     let client = WanikaniClient::default();
     let params = vec![
         //AssignmentsFilter::Burned(true),
