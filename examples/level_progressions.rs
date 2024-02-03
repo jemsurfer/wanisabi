@@ -9,7 +9,6 @@ use wanisabi_model::level_progression::LevelProgression;
 async fn main() -> Result<(), wanisabi::Error> {
     let client = WanikaniClient::default();
     let params = vec![LevelProgressionFilter::Ids(vec![1, 2])];
-
     let lps: CollectionResponse<ResourceResponse<LevelProgression>> =
         client.get_level_progressions_filtered(params).await?;
     let d = lps.data;

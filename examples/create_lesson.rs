@@ -10,11 +10,15 @@ use wanisabi_model::subject::{Meaning, Subject::*};
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
     let client = WanikaniClient::default();
-    let first_lesson_assignment = client
+    let lesson_assignments = client
         .get_assignments_filtered(vec![AssignmentsFilter::ImmediatelyAvailableForLessons])
         .await?
-        .data[0]
-        .clone();
+        .data;
+    if lesson_assignments.len() == 0 {
+        println!("No lessons available");
+        return Ok(());
+    }
+    let first_lesson_assignment = lesson_assignments[0].clone();
     let lesson_subj = client
         .get_subject(first_lesson_assignment.data.subject_id)
         .await?

@@ -9,11 +9,15 @@ use wanisabi_model::subject::{Meaning, Subject::*};
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
     let client = WanikaniClient::default();
-    let first_review_assignment = client
+    let reviews_assignments = client
         .get_assignments_filtered(vec![AssignmentsFilter::ImmediatelyAvailableForReview])
         .await?
-        .data[0]
-        .clone();
+        .data;
+    if reviews_assignments.len() == 0 {
+        println!("No reviews available");
+        return Ok(());
+    }
+    let first_review_assignment = reviews_assignments[0].clone();
     let first_available_review = client
         .get_subject(first_review_assignment.data.subject_id)
         .await?

@@ -21,7 +21,7 @@ pub enum StudyMaterialFilter {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StudyMaterialCreate {
-    pub subjet_id: i64,
+    pub subject_id: i64,
     pub meaning_note: Option<String>,
     pub reading_note: Option<String>,
     pub meaning_synonyms: Option<Vec<String>>,
