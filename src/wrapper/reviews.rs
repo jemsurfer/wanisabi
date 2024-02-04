@@ -1,8 +1,7 @@
 use crate::{
+    client::{Client, QueryProcessor},
     get, post,
     response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
-    wanikani_client::WanikaniClient,
-    wanikani_client::QP,
 };
 use chrono::{DateTime, Utc};
 
@@ -31,7 +30,7 @@ struct ReviewWrapper {
     review: ReviewCreate,
 }
 
-impl WanikaniClient {
+impl Client {
     get!(
         get_reviews_filtered,
         "reviews",

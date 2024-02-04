@@ -1,7 +1,7 @@
 use crate::{
+    client::{Client, QueryProcessor},
     get, put,
     response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
-    wanikani_client::{WanikaniClient, QP},
 };
 use chrono::{DateTime, Utc};
 
@@ -33,7 +33,7 @@ pub struct StartAssignment {
     pub started_at: Option<DateTime<Utc>>,
 }
 
-impl WanikaniClient {
+impl Client {
     get!(
         get_assignments_filtered,
         "assignments",

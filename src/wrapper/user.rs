@@ -5,7 +5,7 @@ use crate::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::{get, wanikani_client::WanikaniClient};
+use crate::{client::Client, get};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UserPreferencesUpdate {
@@ -27,7 +27,7 @@ pub struct UserUpdate {
     pub user: UserInnerUpdate,
 }
 
-impl WanikaniClient {
+impl Client {
     get!(get_user_info, "user", UserResponse);
     put!(update_user_info, "user", UserUpdate, UserResponse);
 }

@@ -1,8 +1,7 @@
 use crate::{
+    client::{Client, QueryProcessor},
     get, post, put,
     response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
-    wanikani_client::WanikaniClient,
-    wanikani_client::QP,
 };
 use chrono::{DateTime, Utc};
 
@@ -44,7 +43,7 @@ struct StudyMaterialUpdateWrapper {
     study_material: StudyMaterialUpdate,
 }
 
-impl WanikaniClient {
+impl Client {
     get!(
         get_study_materials_filtered,
         "study_materials",

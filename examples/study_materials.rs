@@ -1,14 +1,13 @@
 use wanisabi::{
+    client::Client,
     response::{CollectionResponse, ResourceResponse},
-    wanikani_client::WanikaniClient,
 };
 use wanisabi_model::study_material::StudyMaterial;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = WanikaniClient::default();
+    let client = Client::default();
     let params = vec![];
-
     let study_materials: CollectionResponse<ResourceResponse<StudyMaterial>> =
         client.get_study_materials_filtered(params).await?;
     let d = study_materials.data;

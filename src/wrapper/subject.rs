@@ -1,8 +1,7 @@
 use crate::{
+    client::{Client, QueryProcessor},
     get,
     response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
-    wanikani_client::WanikaniClient,
-    wanikani_client::QP,
 };
 use chrono::{DateTime, Utc};
 
@@ -20,7 +19,7 @@ pub enum SubjectFilter {
     UpdatedAfter(DateTime<Utc>),
 }
 
-impl WanikaniClient {
+impl Client {
     get!(
         get_subjects_filtered,
         "subjects",

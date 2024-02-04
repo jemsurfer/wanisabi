@@ -1,9 +1,9 @@
 use crate::{
     get,
     response::{Error, SummaryResponse, WanikaniError},
-    wanikani_client::WanikaniClient,
+    client::Client,
 };
 
-impl WanikaniClient {
+impl Client {
     get!(get_summary, "summary", SummaryResponse);
 }

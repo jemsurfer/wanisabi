@@ -1,14 +1,14 @@
 use text_io::read;
 use wana_kana::ConvertJapanese;
 use wanisabi::{
-    wanikani_client::WanikaniClient,
+    client::Client,
     wrapper::{assignments::AssignmentsFilter, reviews::ReviewCreate},
 };
 use wanisabi_model::subject::{Meaning, Subject::*};
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = WanikaniClient::default();
+    let client = Client::default();
     let reviews_assignments = client
         .get_assignments_filtered(vec![AssignmentsFilter::ImmediatelyAvailableForReview])
         .await?

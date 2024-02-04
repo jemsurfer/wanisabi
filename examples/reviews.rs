@@ -1,12 +1,12 @@
 use wanisabi::{
     response::{CollectionResponse, ResourceResponse},
-    wanikani_client::WanikaniClient,
+    client::Client,
 };
 use wanisabi_model::review::Review;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = WanikaniClient::default();
+    let client = Client::default();
     let params = vec![];
 
     let reviews: CollectionResponse<ResourceResponse<Review>> =

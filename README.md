@@ -11,10 +11,12 @@ An API wrapper for the [wanikani API](https://docs.api.wanikani.com/) written in
 ```rust
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = WanikaniClient::new("<WANIKANI_API_KEY>");
+    let client = Client::new("<WANIKANI_API_KEY>");
     let params = vec![
         AssignmentsFilter::ImmediatelyAvailableForLessons,
     ];
     let assignments = client.get_assignments_filtered(params).await?;
 }
 ```
+
+Note that `Client::default()` attempts to retreive the API key from the WANIKANI_API_KEY environment variable.
