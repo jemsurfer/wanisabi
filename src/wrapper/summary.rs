@@ -1,7 +1,7 @@
 use crate::{
-    get,
-    response::{Error, SummaryResponse, WanikaniError},
     client::Client,
+    get, parse_error,
+    response::{Error, SummaryResponse, WanikaniError},
 };
 
 impl Client {

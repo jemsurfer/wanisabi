@@ -1,5 +1,5 @@
 use crate::{
-    put,
+    parse_error, put,
     response::{Error, UserResponse, WanikaniError},
 };
 

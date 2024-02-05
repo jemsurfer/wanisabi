@@ -19,7 +19,19 @@ pub mod macros {
     //Wanikani can either return data, or an error.
     //So we need to first check whether the data we've got can be parsed into the struct we want
     //Otherwise parse it to an error
-    //Otherwise return a parsing error
+    //Otherwise return a parsing/network error
+    #[macro_export]
+    macro_rules! parse_error {
+        ($return:ty, $res:ident) => {
+            if let Ok(res) = serde_json::from_str::<$return>(&$res) {
+                return Ok(res);
+            } else {
+                return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(
+                    &$res,
+                )?));
+            }
+        };
+    }
     #[macro_export]
     macro_rules! get {
         ($name:tt, $route:expr, $return:ty $(, $v:tt: $t:ty)*) => {
@@ -30,11 +42,7 @@ pub mod macros {
                     .get(url)
                     .bearer_auth(self.key.to_owned());
                 let res = req.send().await?.text().await?;
-                if let Ok(res) = serde_json::from_str::<$return>(&res){
-                    return Ok(res);
-                } else {
-                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
-                }
+                parse_error!($return, res)
             }
         };
         ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
@@ -67,11 +75,7 @@ pub mod macros {
                     .build()?;
                 req.url_mut().set_query(Some(&qs));
                 let res = self.client.execute(req).await?.text().await?;
-                if let Ok(res) = serde_json::from_str::<$return>(&res){
-                    return Ok(res);
-                } else {
-                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
-                }
+                parse_error!($return, res)
             }
         };
     }
@@ -89,12 +93,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                if let Ok(res) = serde_json::from_str::<$return>(&res){
-                    return Ok(res);
-                } else {
-                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
-                }
-
+                parse_error!($return, res)
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
@@ -105,11 +104,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = self.client.execute(req).await?.text().await?;
-                if let Ok(res) = serde_json::from_str::<$return>(&res){
-                    return Ok(res);
-                } else {
-                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
-                }
+                parse_error!($return)
             }
         };
     }
@@ -126,11 +121,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                if let Ok(res) = serde_json::from_str::<$return>(&res){
-                    return Ok(res);
-                } else {
-                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
-                }
+                parse_error!($return, res)
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
@@ -141,11 +132,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = req.send().await?.text().await?;
-                if let Ok(res) = serde_json::from_str::<$return>(&res){
-                    return Ok(res);
-                } else {
-                    return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(&res)?));
-                }
+                parse_error!($return, res)
             }
         };
     }

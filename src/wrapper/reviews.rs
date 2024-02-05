@@ -1,6 +1,6 @@
 use crate::{
     client::{Client, QueryProcessor},
-    get, post,
+    get, parse_error, post,
     response::{CollectionResponse, Error, ResourceResponse, WanikaniError},
 };
 use chrono::{DateTime, Utc};
