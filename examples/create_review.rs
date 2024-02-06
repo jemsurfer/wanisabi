@@ -77,18 +77,16 @@ async fn main() -> Result<(), wanisabi::Error> {
 
 fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) {
     let meanings: Vec<String> = meanings.iter().map(|x| x.meaning.to_lowercase()).collect();
-    let (mut meaning, mut reading) = ("".to_owned(), "".to_owned());
     let mut ask_meaning = true;
     let mut ask_reading = if readings.len() > 0 { true } else { false };
     let (mut incorrect_meaning, mut incorrect_reading) = (0, 0);
-    while !meanings.contains(&meaning.to_lowercase()) && !readings.contains(&reading.to_lowercase())
-    {
+    while ask_meaning || ask_reading {
         if ask_meaning {
             println!("Please enter meaning");
-            meaning = read!();
-            if meaning.len() > 0 && meanings.contains(&meaning) {
+            let meaning: String = read!("{}\n");
+            if meanings.contains(&meaning) {
                 println!("Meaning correct!");
-                ask_meaning = !ask_meaning;
+                ask_meaning = false;
             } else {
                 incorrect_meaning += 1;
                 println!("Meaning incorrect!");
@@ -97,11 +95,12 @@ fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) 
         }
         if ask_reading {
             println!("please enter reading.");
-            reading = read!();
+            std::thread::sleep(std::time::Duration::from_millis(2));
+            let mut reading: String = read!("{}\n");
             reading = reading.to_kana();
-            if reading.len() > 0 && readings.contains(&reading) {
+            if readings.contains(&reading) {
                 println!("Reading correct!");
-                ask_reading = !ask_reading;
+                ask_reading = false;
             } else {
                 incorrect_reading += 1;
                 println!("Reading incorrect");

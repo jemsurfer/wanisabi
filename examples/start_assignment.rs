@@ -26,22 +26,22 @@ async fn main() -> Result<(), wanisabi::Error> {
     match lesson_subj {
         Radical(r) => {
             println!(
-                "Radical {:?}: 
-            Meanings: {:?}.
-            Meaning mnemonic: {:?}
-        ",
+                "\
+Radical {:?}:\n 
+Meanings: {:?}.\n
+Meaning mnemonic: {:?}",
                 r.characters, r.meanings, r.meaning_mnemonic
             );
             meaning_reading(r.meanings, vec![]);
         }
         Kanji(k) => {
             println!(
-                "Kanji {}:
-            Meanings: {:?}
-            Meaning mnemonic: {}
-            Readings: {:?}
-            Reading mnemonic: {}
-                     ",
+                "\
+Kanji {}:\n
+Meanings: {:?}\n
+Meaning mnemonic: {}\n
+Readings: {:?}\n
+Reading mnemonic: {}",
                 k.characters, k.meanings, k.meaning_mnemonic, k.readings, k.reading_mnemonic
             );
             meaning_reading(
@@ -51,13 +51,11 @@ async fn main() -> Result<(), wanisabi::Error> {
         }
         Vocabulary(v) => {
             println!(
-                "
-                Vocabulary {}:
-                Meanings: {:?}
-                Meaning Mnemonic: {}
-                Reading: {:?}
-                Reading mnemonic: {}
-            ",
+                "Vocabulary {}:
+Meanings: {:?}\n
+Meaning Mnemonic: {}\n
+Reading: {:?}\n
+Reading mnemonic: {}",
                 v.characters, v.meanings, v.meaning_mnemonic, v.readings, v.reading_mnemonic
             );
             meaning_reading(
@@ -67,9 +65,10 @@ async fn main() -> Result<(), wanisabi::Error> {
         }
         KanaVocabulary(kv) => {
             println!(
-                "Kana Vocabulary: {}
-                     Meanings: {:?}
-                     Meaning Mnemonic: {}",
+                "\
+Kana Vocabulary: {}\n
+Meanings: {:?}\n
+Meaning Mnemonic: {}",
                 kv.characters, kv.meanings, kv.meaning_mnemonic
             );
             meaning_reading(kv.meanings, vec![]);
@@ -96,7 +95,7 @@ fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) 
     {
         if ask_meaning {
             println!("Please enter meaning");
-            meaning = read!();
+            meaning = read!("{}\n");
             if meaning.len() > 0 && meanings.contains(&meaning) {
                 println!("Meaning correct!");
                 ask_meaning = !ask_meaning;
@@ -108,7 +107,7 @@ fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) 
         }
         if ask_reading {
             println!("please enter reading.");
-            reading = read!();
+            reading = read!("{}\n");
             reading = reading.to_kana();
             if reading.len() > 0 && readings.contains(&reading) {
                 println!("Reading correct!");

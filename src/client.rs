@@ -26,16 +26,14 @@ pub mod macros {
             if let Ok(res) = serde_json::from_str::<$return>(&$res) {
                 return Ok(res);
             } else {
-                return Err(Error::Wanikani(serde_json::from_str::<WanikaniError>(
-                    &$res,
-                )?));
+                return Err(serde_json::from_str(&$res)?);
             }
         };
     }
     #[macro_export]
     macro_rules! get {
         ($name:tt, $route:expr, $return:ty $(, $v:tt: $t:ty)*) => {
-            pub async fn $name(&self $(, $v: $t)*) -> Result<$return, Error> {
+            pub async fn $name(&self $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
                 let req = self
                     .client
@@ -46,7 +44,7 @@ pub mod macros {
             }
         };
         ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
-            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, Error> {
+            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let qp = QueryProcessor(query);
                 let re = regex::Regex::new(r"\[\d+\]").unwrap();
                 let qs = qs::to_string(&qp).unwrap();
@@ -83,7 +81,7 @@ pub mod macros {
     #[macro_export]
     macro_rules! post {
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper: ident, $attr: ident $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, Error> {
+            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let wrapped = $wrapper{
                     $attr: body
                 };
@@ -97,7 +95,7 @@ pub mod macros {
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let req = self
                     .client
                     .post("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
@@ -111,7 +109,7 @@ pub mod macros {
     #[macro_export]
     macro_rules! put {
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper:ident, $attr: ident $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, Error> {
+            pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let wrapped = $wrapper{
                     $attr: body,
                 };
@@ -125,7 +123,7 @@ pub mod macros {
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
-            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, Error> {
+            pub async fn $name(&self, body: &$body $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let req = self
                     .client
                     .put("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))

@@ -53,16 +53,20 @@ pub struct WanikaniError {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum Error {
-    Wanikani(WanikaniError),
     Reqwest(String),
     Deserialization(String),
+    #[serde(untagged)]
+    Wanikani {
+        error: String,
+        code: i64,
+    },
 }
 
 impl Display for Error {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match self {
-            Error::Wanikani(e) => {
-                write!(f, "Wanikani error: {} (Code {})", e.error, e.code)
+            Error::Wanikani { error, code } => {
+                write!(f, "Wanikani error: {} (Code {})", error, code)
             }
             Error::Reqwest(e) => {
                 write!(f, "Reqwest error: {e}")

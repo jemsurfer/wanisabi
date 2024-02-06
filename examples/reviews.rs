@@ -1,6 +1,6 @@
 use wanisabi::{
-    response::{CollectionResponse, ResourceResponse},
     client::Client,
+    response::{CollectionResponse, ResourceResponse},
 };
 use wanisabi_model::review::Review;
 
@@ -8,7 +8,8 @@ use wanisabi_model::review::Review;
 async fn main() -> Result<(), wanisabi::Error> {
     let client = Client::default();
     let params = vec![];
-
+    //NOTE: this endpoint currently returns no data: (as of 06/02/24)
+    //https://docs.api.wanikani.com/20170710/#get-all-reviews
     let reviews: CollectionResponse<ResourceResponse<Review>> =
         client.get_reviews_filtered(params).await?;
     let d = reviews.data;

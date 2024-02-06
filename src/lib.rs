@@ -1,3 +1,7 @@
+///The crate's error type. Aggregates errors from:
+/// - Wanikani
+/// - Reqwest
+/// - Serde
 pub use response::Error;
 pub use wanisabi_model as model;
 
