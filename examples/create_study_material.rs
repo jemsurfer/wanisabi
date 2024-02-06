@@ -5,7 +5,7 @@ use wanisabi_model::subject::Subject::*;
 async fn main() -> Result<(), wanisabi::Error> {
     println!("Enter a subject ID you wish to add a note to.");
     let client = Client::default();
-    let subject_id: i64 = read!();
+    let subject_id: i64 = read!("{}\n");
     let s = client.get_subject(subject_id).await?.data;
     let (meaning_note, meaning_synonyms, reading_note) = match s {
         Radical(r) => {
@@ -47,7 +47,7 @@ async fn main() -> Result<(), wanisabi::Error> {
 fn meaning_reading_note_and_synonyms(
     collect_reading: bool,
 ) -> (Option<String>, Option<Vec<String>>, Option<String>) {
-    let meaning_note: String = read!();
+    let meaning_note: String = read!("{}\n");
     let meaning_note = if meaning_note.len() > 0 {
         Some(meaning_note)
     } else {
@@ -56,7 +56,7 @@ fn meaning_reading_note_and_synonyms(
     let mut synonyms = vec![];
     loop {
         println!("Enter a synonym or type /stop to stop");
-        let inp: String = read!();
+        let inp: String = read!("{}\n");
         if inp == "/stop" {
             break;
         }
@@ -69,7 +69,7 @@ fn meaning_reading_note_and_synonyms(
     };
     let reading_note = if collect_reading {
         println!("Enter a reading note");
-        Some(read!())
+        Some(read!("{}\n"))
     } else {
         None
     };
