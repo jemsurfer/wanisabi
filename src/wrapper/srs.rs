@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -20,17 +20,17 @@ impl Client {
         get_spaced_repetition_systems_filtered,
         "spaced_repetition_systems",
         SpacedRepetitionSystemFilter,
-        CollectionResponse<ResourceResponse<SpacedRepetitionSystem>>
+        CollectionResponse<SpacedRepetitionSystem>
     );
     get!(
         get_spaced_repetition_systems,
         "spaced_repetition_systems",
-        CollectionResponse<ResourceResponse<SpacedRepetitionSystem>>
+        CollectionResponse<SpacedRepetitionSystem>
     );
     get!(
         get_spaced_repetition_system,
         "spaced_repetition_systems/{id}",
-        ResourceResponse<SpacedRepetitionSystem>,
+        IdResponse<SpacedRepetitionSystem>,
         id: i64
     );
 }

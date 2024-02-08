@@ -1,6 +1,6 @@
 use wanisabi::{
-    response::{CollectionResponse, ResourceResponse},
     client::Client,
+    response::{CollectionResponse},
 };
 use wanisabi_model::review_statistic::ReviewStatistic;
 
@@ -9,7 +9,7 @@ async fn main() -> Result<(), wanisabi::Error> {
     let client = Client::default();
     let params = vec![];
 
-    let review_statistics: CollectionResponse<ResourceResponse<ReviewStatistic>> =
+    let review_statistics: CollectionResponse<ReviewStatistic> =
         client.get_review_statistics_filtered(params).await?;
     let d = review_statistics.data;
     if d.is_empty() {

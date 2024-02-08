@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -20,17 +20,17 @@ impl Client {
         get_level_progressions_filtered,
         "level_progressions",
         LevelProgressionFilter,
-        CollectionResponse<ResourceResponse<LevelProgression>>
+        CollectionResponse<LevelProgression>
     );
     get!(
         get_level_progressions,
         "level_progressions",
-        CollectionResponse<ResourceResponse<LevelProgression>>
+        CollectionResponse<LevelProgression>
     );
     get!(
         get_level_progression,
         "level_progressions/{id}",
-        ResourceResponse<LevelProgression>,
+        IdResponse<LevelProgression>,
         id: i64
     );
 }

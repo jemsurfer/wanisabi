@@ -1,9 +1,7 @@
-use crate::{
-    parse_error, put,
-    response::{UserResponse},
-};
+use crate::{parse_error, put, response::UniqueResponse};
 
 use serde::{Deserialize, Serialize};
+use wanisabi_model::user::User;
 
 use crate::{client::Client, get};
 
@@ -28,6 +26,6 @@ pub struct UserUpdate {
 }
 
 impl Client {
-    get!(get_user_info, "user", UserResponse);
-    put!(update_user_info, "user", UserUpdate, UserResponse);
+    get!(get_user_info, "user", UniqueResponse<User>);
+    put!(update_user_info, "user", UserUpdate, UniqueResponse<User>);
 }

@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -24,17 +24,13 @@ impl Client {
         get_subjects_filtered,
         "subjects",
         SubjectFilter,
-        CollectionResponse<ResourceResponse<Subject>>
+        CollectionResponse<Subject>
     );
-    get!(
-        get_subjects,
-        "subjects",
-        CollectionResponse<ResourceResponse<Subject>>
-    );
+    get!(get_subjects, "subjects", CollectionResponse<Subject>);
     get!(
         get_subject,
         "subjects/{id}",
-        ResourceResponse<Subject>,
+        IdResponse<Subject>,
         id: i64
     );
 }

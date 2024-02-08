@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error, put,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -38,24 +38,24 @@ impl Client {
         get_assignments_filtered,
         "assignments",
         AssignmentsFilter,
-        CollectionResponse<ResourceResponse<Assignment>>
+        CollectionResponse<Assignment>
     );
     get!(
         get_assignments,
         "assignments",
-        CollectionResponse<ResourceResponse<Assignment>>
+        CollectionResponse<Assignment>
     );
     get!(
         get_assignment,
         "assignments/{id}",
-        ResourceResponse<Assignment>,
+        IdResponse<Assignment>,
         id: i64
     );
     put!(
         start_assignment,
         "assignments/{id}/start",
         StartAssignment,
-        ResourceResponse<Assignment>,
+        IdResponse<Assignment>,
         id: i64
     );
 }

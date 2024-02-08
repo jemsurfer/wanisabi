@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -20,12 +20,8 @@ impl Client {
         get_resets_filtered,
         "resets",
         ResetFilter,
-        CollectionResponse<ResourceResponse<Reset>>
+        CollectionResponse<Reset>
     );
-    get!(
-        get_resets,
-        "resets",
-        CollectionResponse<ResourceResponse<Reset>>
-    );
-    get!(get_reset, "resets/{id}", ResourceResponse<Reset>, id: i64);
+    get!(get_resets, "resets", CollectionResponse<Reset>);
+    get!(get_reset, "resets/{id}", IdResponse<Reset>, id: i64);
 }

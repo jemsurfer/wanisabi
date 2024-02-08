@@ -1,6 +1,6 @@
 use wanisabi::{
-    response::{CollectionResponse, ResourceResponse},
     client::Client,
+    response::{CollectionResponse},
 };
 use wanisabi_model::voice_actor::VoiceActor;
 
@@ -9,7 +9,7 @@ async fn main() -> Result<(), wanisabi::Error> {
     let client = Client::default();
     let params = vec![];
 
-    let voice_actors: CollectionResponse<ResourceResponse<VoiceActor>> =
+    let voice_actors: CollectionResponse<VoiceActor> =
         client.get_voice_actors_filtered(params).await?;
     let d = voice_actors.data;
     if d.is_empty() {

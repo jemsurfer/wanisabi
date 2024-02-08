@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error, post, put,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -48,24 +48,24 @@ impl Client {
         get_study_materials_filtered,
         "study_materials",
         StudyMaterialFilter,
-        CollectionResponse<ResourceResponse<StudyMaterial>>
+        CollectionResponse<StudyMaterial>
     );
     get!(
         get_study_materials,
         "study_materials",
-        CollectionResponse<ResourceResponse<StudyMaterial>>
+        CollectionResponse<StudyMaterial>
     );
     get!(
         get_study_material,
         "study_materials/{id}",
-        ResourceResponse<StudyMaterial>,
+        IdResponse<StudyMaterial>,
         id: i64
     );
     post!(
         create_study_material,
         "study_materials/",
         StudyMaterialCreate,
-        ResourceResponse<StudyMaterial>,
+        IdResponse<StudyMaterial>,
         StudyMaterialCreateWrapper,
         study_material
     );
@@ -73,7 +73,7 @@ impl Client {
         update_study_material,
         "study_materials/{id}",
         StudyMaterialUpdate,
-        ResourceResponse<StudyMaterial>,
+        IdResponse<StudyMaterial>,
         StudyMaterialUpdateWrapper,
         study_material,
         id: i64

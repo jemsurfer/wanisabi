@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -25,17 +25,17 @@ impl Client {
         get_review_statistics_filtered,
         "review_statistics",
         ReviewStatisticFilter,
-        CollectionResponse<ResourceResponse<ReviewStatistic>>
+        CollectionResponse<ReviewStatistic>
     );
     get!(
         get_review_statistics,
         "review_statistics",
-        CollectionResponse<ResourceResponse<ReviewStatistic>>
+        CollectionResponse<ReviewStatistic>
     );
     get!(
         get_review_statistic,
         "review_statistics/{id}",
-        ResourceResponse<ReviewStatistic>,
+        IdResponse<ReviewStatistic>,
         id: i64
     );
 }

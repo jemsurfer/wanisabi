@@ -1,6 +1,5 @@
 use wanisabi::{
-    response::{CollectionResponse, ResourceResponse},
-    client::Client,
+    client::Client, response::CollectionResponse,
     wrapper::level_progressions::LevelProgressionFilter,
 };
 use wanisabi_model::level_progression::LevelProgression;
@@ -9,7 +8,7 @@ use wanisabi_model::level_progression::LevelProgression;
 async fn main() -> Result<(), wanisabi::Error> {
     let client = Client::default();
     let params = vec![LevelProgressionFilter::Ids(vec![1, 2])];
-    let lps: CollectionResponse<ResourceResponse<LevelProgression>> =
+    let lps: CollectionResponse<LevelProgression> =
         client.get_level_progressions_filtered(params).await?;
     let d = lps.data;
     if d.is_empty() {

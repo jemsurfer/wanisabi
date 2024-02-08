@@ -1,7 +1,5 @@
 use wanisabi::{
-    client::Client,
-    response::{CollectionResponse, ResourceResponse},
-    wrapper::assignments::AssignmentsFilter,
+    client::Client, response::CollectionResponse, wrapper::assignments::AssignmentsFilter,
 };
 use wanisabi_model::assignment::Assignment;
 
@@ -15,7 +13,7 @@ async fn main() -> Result<(), wanisabi::Error> {
         //AssignmentsFilter::AvailableAfter(chrono::offset::Utc::now()),
         //AssignmentsFilter::Hidden(false),
     ];
-    let assignments: CollectionResponse<ResourceResponse<Assignment>> =
+    let assignments: CollectionResponse<Assignment> =
         client.get_assignments_filtered(params).await?;
     let d = assignments.data;
     let first = d.first().unwrap();

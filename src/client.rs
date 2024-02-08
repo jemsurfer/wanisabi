@@ -1,13 +1,14 @@
+use ratelimit::Ratelimiter;
+use reqwest::Response;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_with::EnumMap;
-use std::env;
-use std::fmt::Debug;
+use std::{env, time::Duration};
 
-#[derive(Clone, Debug)]
 pub struct Client {
     pub key: String,
     pub client: reqwest::Client,
+    pub rate_limiter: Ratelimiter,
 }
 
 #[serde_with::serde_as]
@@ -22,13 +23,16 @@ pub mod macros {
     //Otherwise return a parsing/network error
     #[macro_export]
     macro_rules! parse_error {
-        ($return:ty, $res:ident) => {
-            if let Ok(res) = serde_json::from_str::<$return>(&$res) {
-                return Ok(res);
-            } else {
-                return Err(serde_json::from_str(&$res)?);
+        ($return:ty, $res:ident, $self:ident) => {{
+            if let Err(sleep) = $self.rate_limiter.try_wait() {
+                tokio::time::sleep(sleep).await;
             }
-        };
+            if let Ok(res) = serde_json::from_str::<$return>(&$res) {
+                Ok(res)
+            } else {
+                Err(serde_json::from_str(&$res)?)
+            }
+        }};
     }
     #[macro_export]
     macro_rules! get {
@@ -40,7 +44,7 @@ pub mod macros {
                     .get(url)
                     .bearer_auth(self.key.to_owned());
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res)
+                parse_error!($return, res, self)
             }
         };
         ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
@@ -73,7 +77,7 @@ pub mod macros {
                     .build()?;
                 req.url_mut().set_query(Some(&qs));
                 let res = self.client.execute(req).await?.text().await?;
-                parse_error!($return, res)
+                parse_error!($return, res, self)
             }
         };
     }
@@ -91,7 +95,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res)
+                parse_error!($return, res, self)
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
@@ -102,7 +106,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = self.client.execute(req).await?.text().await?;
-                parse_error!($return)
+                parse_error!($return, res, self)
             }
         };
     }
@@ -119,7 +123,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res)
+                parse_error!($return, res, self)
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
@@ -130,30 +134,48 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res)
+                parse_error!($return, res, self)
             }
         };
     }
 }
 
 impl Client {
-    pub fn new(key: String) -> Self {
+    pub fn new(key: String) -> Result<Self, crate::Error> {
         let client = reqwest::Client::new();
-        Self { key, client }
+        let rate_limiter = Ratelimiter::builder(1, Duration::from_secs(60)).build()?;
+        Ok(Self {
+            key,
+            client,
+            rate_limiter,
+        })
+    }
+    pub async fn get(&self, url: String) -> Result<Response, reqwest::Error> {
+        Ok(self
+            .client
+            .get(url)
+            .bearer_auth(self.key.clone())
+            .send()
+            .await?)
     }
 }
 
 impl Default for Client {
     fn default() -> Self {
         let client = reqwest::Client::new();
+        let rate_limiter = Ratelimiter::builder(1, Duration::from_secs(1))
+            .build()
+            .unwrap();
         match env::var_os("WANIKANI_API_KEY") {
             Some(key) => Self {
                 key: key.into_string().unwrap(),
                 client,
+                rate_limiter,
             },
             None => Self {
                 key: String::new(),
                 client,
+                rate_limiter,
             },
         }
     }

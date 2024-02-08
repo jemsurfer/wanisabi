@@ -1,6 +1,6 @@
 use wanisabi::{
-    response::{CollectionResponse, ResourceResponse},
     client::Client,
+    response::{CollectionResponse},
 };
 use wanisabi_model::spaced_repetition_system::SpacedRepetitionSystem;
 
@@ -9,10 +9,9 @@ async fn main() -> Result<(), wanisabi::Error> {
     let client = Client::default();
     let params = vec![];
 
-    let spaced_repetition_systems: CollectionResponse<ResourceResponse<SpacedRepetitionSystem>> =
-        client
-            .get_spaced_repetition_systems_filtered(params)
-            .await?;
+    let spaced_repetition_systems: CollectionResponse<SpacedRepetitionSystem> = client
+        .get_spaced_repetition_systems_filtered(params)
+        .await?;
     let d = spaced_repetition_systems.data;
     if d.is_empty() {
         return Ok(());

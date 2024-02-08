@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -20,17 +20,17 @@ impl Client {
         get_voice_actors_filtered,
         "voice_actors",
         VoiceActorFilter,
-        CollectionResponse<ResourceResponse<VoiceActor>>
+        CollectionResponse<VoiceActor>
     );
     get!(
         get_voice_actors,
         "voice_actors",
-        CollectionResponse<ResourceResponse<VoiceActor>>
+        CollectionResponse<VoiceActor>
     );
     get!(
         get_voice_actor,
         "voice_actors/{id}",
-        ResourceResponse<VoiceActor>,
+        IdResponse<VoiceActor>,
         id: i64
     );
 }

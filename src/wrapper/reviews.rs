@@ -1,7 +1,7 @@
 use crate::{
     client::{Client, QueryProcessor},
     get, parse_error, post,
-    response::{CollectionResponse, ResourceResponse},
+    response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};
 
@@ -35,24 +35,20 @@ impl Client {
         get_reviews_filtered,
         "reviews",
         ReviewFilter,
-        CollectionResponse<ResourceResponse<Review>>
+        CollectionResponse<Review>
     );
-    get!(
-        get_reviews,
-        "reviews",
-        CollectionResponse<ResourceResponse<Review>>
-    );
+    get!(get_reviews, "reviews", CollectionResponse<Review>);
     get!(
         get_review,
         "reviews/{id}",
-        ResourceResponse<Review>,
+        IdResponse<Review>,
         id: i64
     );
     post!(
         create_review,
         "reviews",
         ReviewCreate,
-        ResourceResponse<Review>,
+        IdResponse<Review>,
         ReviewWrapper,
         review
     );
