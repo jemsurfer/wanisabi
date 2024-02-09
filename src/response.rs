@@ -1,9 +1,7 @@
 use crate::client::Client;
 use chrono::{DateTime, Utc};
-use paginate::Pages;
-use serde::{Deserialize, Serialize};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{
-    any::type_name,
     fmt::{self, Display, Formatter},
     num::TryFromIntError,
 };
@@ -115,25 +113,19 @@ impl From<ratelimit::Error> for Error {
     }
 }
 
-//TODO
-impl<T: Deserialize<'static>> CollectionResponse<T> {
-    pub async fn paginate(&mut self, c: Client) -> Result<Vec<IdResponse<T>>, crate::Error> {
-        let mut res = vec![];
-        //Bodge to find the endpoint of a given type;
-        let type_name = type_name::<T>().to_lowercase();
-        let endpoint = type_name.split("::").nth(2).unwrap().to_owned() + "s";
-        let pages = Pages::new(
-            self.total_count.try_into()?,
-            self.pages.per_page.try_into()?,
-        );
-        for page in pages.into_iter() {
-            let url = format!(
-                "https://api.wanikani.com/{endpoint}/?page_after_id={}",
-                page.offset
-            );
-            let a = c.get(url).await?.text().await?;
-            res.push(a);
+impl<T: DeserializeOwned + Clone> CollectionResponse<T> {
+    pub async fn paginate(&self, c: Client) -> Result<Vec<IdResponse<T>>, crate::Error> {
+        let mut responses = self.data.to_vec();
+        if self.pages.next_url.is_none() {
+            return Ok(responses);
         }
-        todo!()
+        let mut next = self.pages.next_url.clone();
+        while let Some(url) = next {
+            let a: CollectionResponse<T> = serde_json::from_str(&c.get(url).await?.text().await?)?;
+            responses.extend(a.data);
+            next = a.pages.next_url;
+            println!("next: {next:?}");
+        }
+        Ok(responses)
     }
 }

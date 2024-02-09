@@ -81,7 +81,6 @@ pub mod macros {
             }
         };
     }
-
     #[macro_export]
     macro_rules! post {
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper: ident, $attr: ident $(,$v:tt: $t:ty)*) => {
@@ -151,6 +150,9 @@ impl Client {
         })
     }
     pub async fn get(&self, url: String) -> Result<Response, reqwest::Error> {
+        if let Err(sleep) = self.rate_limiter.try_wait() {
+            tokio::time::sleep(sleep).await;
+        }
         Ok(self
             .client
             .get(url)

@@ -1,14 +1,9 @@
-use wanisabi::{
-    client::Client,
-    response::{CollectionResponse},
-};
-use wanisabi_model::subject::Subject;
+use wanisabi::client::Client;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
     let client = Client::default();
-    let params = vec![];
-    let subjects: CollectionResponse<Subject> = client.get_subjects_filtered(params).await?;
+    let subjects = client.get_subjects().await?;
     dbg!(&subjects);
     let d = subjects.data;
     if d.is_empty() {
