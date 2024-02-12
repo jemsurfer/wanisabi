@@ -25,6 +25,7 @@ pub mod macros {
     macro_rules! parse_error {
         ($return:ty, $res:ident, $self:ident) => {{
             if let Err(sleep) = $self.rate_limiter.try_wait() {
+                println!("Got rate limited! Sleeping {sleep:?}");
                 tokio::time::sleep(sleep).await;
             }
             if let Ok(res) = serde_json::from_str::<$return>(&$res) {
@@ -142,7 +143,10 @@ pub mod macros {
 impl Client {
     pub fn new(key: String) -> Result<Self, crate::Error> {
         let client = reqwest::Client::new();
-        let rate_limiter = Ratelimiter::builder(1, Duration::from_secs(60)).build()?;
+        let rate_limiter = Ratelimiter::builder(60, Duration::from_secs(60))
+            .max_tokens(60)
+            .initial_available(60)
+            .build()?;
         Ok(Self {
             key,
             client,
@@ -165,7 +169,9 @@ impl Client {
 impl Default for Client {
     fn default() -> Self {
         let client = reqwest::Client::new();
-        let rate_limiter = Ratelimiter::builder(1, Duration::from_secs(1))
+        let rate_limiter = Ratelimiter::builder(60, Duration::from_secs(60))
+            .max_tokens(60)
+            .initial_available(60)
             .build()
             .unwrap();
         match env::var_os("WANIKANI_API_KEY") {
