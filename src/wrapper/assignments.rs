@@ -22,8 +22,8 @@ pub enum AssignmentsFilter {
     Levels(Vec<i64>),
     SrsStages(Vec<i64>),
     Started(bool),
-    SubjetIds(Vec<i64>),
-    SubjetTypes(Vec<String>),
+    SubjectIds(Vec<i64>),
+    SubjectTypes(Vec<String>),
     Unlocked(bool),
     UpdatedAfter(DateTime<Utc>),
 }
