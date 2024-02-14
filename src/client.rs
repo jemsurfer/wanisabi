@@ -117,6 +117,7 @@ pub mod macros {
                 let wrapped = $wrapper{
                     $attr: body,
                 };
+                println!("{wrapped:?}");
                 let req = self
                     .client
                     .put("https://api.wanikani.com/v2/".to_owned() + &(format!($route)))
