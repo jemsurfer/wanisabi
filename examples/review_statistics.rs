@@ -1,7 +1,4 @@
-use wanisabi::{
-    client::Client,
-    response::{CollectionResponse},
-};
+use wanisabi::{client::Client, response::CollectionResponse};
 use wanisabi_model::review_statistic::ReviewStatistic;
 
 #[tokio::main]

@@ -1,7 +1,4 @@
-use wanisabi::{
-    client::Client,
-    response::{CollectionResponse},
-};
+use wanisabi::{client::Client, response::CollectionResponse};
 use wanisabi_model::study_material::StudyMaterial;
 
 #[tokio::main]

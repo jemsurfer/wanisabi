@@ -1,7 +1,4 @@
-use wanisabi::{
-    client::Client,
-    response::{CollectionResponse},
-};
+use wanisabi::{client::Client, response::CollectionResponse};
 use wanisabi_model::spaced_repetition_system::SpacedRepetitionSystem;
 
 #[tokio::main]

@@ -1,4 +1,4 @@
-use wanisabi::{client::Client};
+use wanisabi::client::Client;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
