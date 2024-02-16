@@ -3,7 +3,7 @@ use wanisabi_model::review_statistic::ReviewStatistic;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![];
 
     let review_statistics: CollectionResponse<ReviewStatistic> =

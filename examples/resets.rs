@@ -3,7 +3,7 @@ use wanisabi_model::reset::Reset;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![];
 
     let resets: CollectionResponse<Reset> = client.get_resets_filtered(params).await?;

@@ -1,4 +1,4 @@
-use crate::{parse_error, put, response::UniqueResponse};
+use crate::{process_response, put, response::UniqueResponse};
 
 use serde::{Deserialize, Serialize};
 use wanisabi_model::user::User;

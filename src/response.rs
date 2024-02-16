@@ -57,8 +57,12 @@ pub enum Error {
     ///The wrapper couldn't parse the result properly
     Deserialization(String),
     ///The ranges wanikani gave us don't fit
-    RangeError(String),
+    Range(String),
+    ///There was a problem constructing the rate limiter
     RateLimit(String),
+    ///Sql DB error
+    Sqlx(String),
+    NoApiKey,
     ///Wanikani has a problem with the data we've uploaded
     #[serde(untagged)]
     Wanikani {
@@ -79,11 +83,18 @@ impl Display for Error {
             Error::Deserialization(e) => {
                 write!(f, "Error deserializing response: {e}")
             }
-            Error::RangeError(e) => {
+            Error::Range(e) => {
                 write!(f, "Range error: {e}")
             }
             Error::RateLimit(e) => {
                 write!(f, "Rate Limit error: {e}")
+            }
+            Error::Sqlx(e) => {
+                write!(f, "Sqlx error: {e}")
+            }
+            Error::NoApiKey => {
+                write!(f, "Failed to create a client using default(). 
+                       Ensure you have set the WANIKANI_API_KEY environment variable, or use Client::new(KEY).")
             }
         }
     }
@@ -103,13 +114,19 @@ impl From<serde_json::Error> for Error {
 
 impl From<TryFromIntError> for Error {
     fn from(value: TryFromIntError) -> Self {
-        Self::RangeError(value.to_string())
+        Self::Range(value.to_string())
     }
 }
 
 impl From<ratelimit::Error> for Error {
     fn from(value: ratelimit::Error) -> Self {
         Self::RateLimit(value.to_string())
+    }
+}
+
+impl From<sqlx::error::Error> for Error {
+    fn from(value: sqlx::error::Error) -> Self {
+        Self::Sqlx(value.to_string())
     }
 }
 
@@ -124,7 +141,6 @@ impl<T: DeserializeOwned + Clone> CollectionResponse<T> {
             let a: CollectionResponse<T> = serde_json::from_str(&c.get(url).await?.text().await?)?;
             responses.extend(a.data);
             next = a.pages.next_url;
-            println!("next: {next:?}");
         }
         Ok(responses)
     }

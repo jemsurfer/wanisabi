@@ -1,14 +1,17 @@
+use home::home_dir;
 use ratelimit::Ratelimiter;
 use reqwest::Response;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_with::EnumMap;
+use sqlx::{sqlite::SqlitePoolOptions, SqlitePool};
 use std::{env, time::Duration};
 
 pub struct Client {
     pub key: String,
     pub client: reqwest::Client,
     pub rate_limiter: Ratelimiter,
+    pub db_pool: SqlitePool,
 }
 
 #[serde_with::serde_as]
@@ -22,10 +25,9 @@ pub mod macros {
     //Otherwise parse it to an error
     //Otherwise return a parsing/network error
     #[macro_export]
-    macro_rules! parse_error {
+    macro_rules! process_response {
         ($return:ty, $res:ident, $self:ident) => {{
             if let Err(sleep) = $self.rate_limiter.try_wait() {
-                println!("Got rate limited! Sleeping {sleep:?}");
                 tokio::time::sleep(sleep).await;
             }
             if let Ok(res) = serde_json::from_str::<$return>(&$res) {
@@ -45,7 +47,7 @@ pub mod macros {
                     .get(url)
                     .bearer_auth(self.key.to_owned());
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res, self)
+                process_response!($return, res, self)
             }
         };
         ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
@@ -78,7 +80,7 @@ pub mod macros {
                     .build()?;
                 req.url_mut().set_query(Some(&qs));
                 let res = self.client.execute(req).await?.text().await?;
-                parse_error!($return, res, self)
+                process_response!($return, res, self)
             }
         };
     }
@@ -95,7 +97,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res, self)
+                process_response!($return, res, self)
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
@@ -106,7 +108,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = self.client.execute(req).await?.text().await?;
-                parse_error!($return, res, self)
+                process_response!($return, res, self)
             }
         };
     }
@@ -123,7 +125,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res, self)
+                process_response!($return, res, self)
             }
         };
         ($name:tt, $route:expr, $body:ty, $return:ty $(,$v:tt: $t:ty)*) => {
@@ -134,25 +136,40 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = req.send().await?.text().await?;
-                parse_error!($return, res, self)
+                process_response!($return, res, self)
             }
         };
     }
 }
 
 impl Client {
-    pub fn new(key: String) -> Result<Self, crate::Error> {
+    //The default trait cannot be derived for async functions
+    pub async fn default() -> Result<Self, crate::Error> {
         let client = reqwest::Client::new();
-        let rate_limiter = Ratelimiter::builder(60, Duration::from_secs(60))
-            .max_tokens(60)
-            .initial_available(60)
-            .build()?;
+        let (rate_limiter, db_pool) = rate_limiter_and_pool().await?;
+        match env::var_os("WANIKANI_API_KEY") {
+            Some(key) => Ok(Self {
+                key: key.into_string().unwrap(),
+                client,
+                rate_limiter,
+                db_pool,
+            }),
+            None => Err(crate::Error::NoApiKey),
+        }
+    }
+
+    pub async fn new(key: String) -> Result<Self, crate::Error> {
+        let client = reqwest::Client::new();
+        let (rate_limiter, db_pool) = rate_limiter_and_pool().await?;
         Ok(Self {
             key,
             client,
             rate_limiter,
+            db_pool,
         })
     }
+
+    //Generic get function for other URLs
     pub async fn get(&self, url: String) -> Result<Response, reqwest::Error> {
         if let Err(sleep) = self.rate_limiter.try_wait() {
             tokio::time::sleep(sleep).await;
@@ -166,25 +183,16 @@ impl Client {
     }
 }
 
-impl Default for Client {
-    fn default() -> Self {
-        let client = reqwest::Client::new();
-        let rate_limiter = Ratelimiter::builder(60, Duration::from_secs(60))
-            .max_tokens(60)
-            .initial_available(60)
-            .build()
-            .unwrap();
-        match env::var_os("WANIKANI_API_KEY") {
-            Some(key) => Self {
-                key: key.into_string().unwrap(),
-                client,
-                rate_limiter,
-            },
-            None => Self {
-                key: String::new(),
-                client,
-                rate_limiter,
-            },
-        }
-    }
+async fn rate_limiter_and_pool() -> Result<(Ratelimiter, SqlitePool), crate::Error> {
+    let rate_limiter = Ratelimiter::builder(60, Duration::from_secs(60))
+        .max_tokens(60)
+        .initial_available(60)
+        .build()?;
+    let dir = home_dir()
+        .map(|mut path| {
+            path.push(".wanisabi.db");
+            path.to_str().unwrap_or_default().to_owned()
+        })
+        .unwrap_or_default();
+    Ok((rate_limiter, SqlitePoolOptions::new().connect(&dir).await?))
 }

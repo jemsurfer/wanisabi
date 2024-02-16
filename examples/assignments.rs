@@ -2,7 +2,7 @@ use wanisabi::{client::Client, wrapper::assignments::AssignmentsFilter};
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![
         //AssignmentsFilter::Burned(true),
         //AssignmentsFilter::Levels(vec![1]),

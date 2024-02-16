@@ -6,7 +6,7 @@ use wanisabi_model::level_progression::LevelProgression;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![LevelProgressionFilter::Ids(vec![1, 2])];
     let lps: CollectionResponse<LevelProgression> =
         client.get_level_progressions_filtered(params).await?;

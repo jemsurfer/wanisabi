@@ -2,7 +2,7 @@ use wanisabi::client::Client;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let subjects = client.get_subjects().await?;
     dbg!(&subjects);
     let d = subjects.data;

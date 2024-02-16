@@ -3,7 +3,7 @@ use wanisabi_model::study_material::StudyMaterial;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![];
     let study_materials: CollectionResponse<StudyMaterial> =
         client.get_study_materials_filtered(params).await?;

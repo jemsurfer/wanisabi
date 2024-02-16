@@ -7,7 +7,7 @@ use wanisabi::{
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let body = UserUpdate {
         preferences: UserPreferencesUpdate {
             default_voice_actor_id: None,

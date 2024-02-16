@@ -1,9 +1,9 @@
 [package]
 name = "wanisabi"
-version = "0.1.6"
+version = "0.1.7"
 edition = "2021"
 license = "MIT"
-description = "Rust binding for the wanikani API: a fork of wanikani-rs"
+description = "Rust bindings for the wanikani API: a fork of wanikani-rs"
 homepage = "https://github.com/jemsurfer/wanisabi"
 repository = "https://github.com/jemsurfer/wanisabi"
 keywords = ["api", "wanikani"]
@@ -22,5 +22,6 @@ serde_qs = "0.12.0"
 regex = "1.10.3"
 text_io = "0.1.12"
 wana_kana = "3.0.0"
-paginate = "1.1.11"
 ratelimit = "0.9.0"
+sqlx = {version = "0.7.3", features = ["runtime-tokio", "sqlite"]}
+home = "0.5.9"

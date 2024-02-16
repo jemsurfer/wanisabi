@@ -3,7 +3,7 @@ use wanisabi_model::spaced_repetition_system::SpacedRepetitionSystem;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![];
 
     let spaced_repetition_systems: CollectionResponse<SpacedRepetitionSystem> = client

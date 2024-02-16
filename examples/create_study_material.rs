@@ -4,7 +4,7 @@ use wanisabi_model::subject::Subject::*;
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
     println!("Enter a subject ID you wish to add a note to.");
-    let client = Client::default();
+    let client = Client::default().await?;
     let subject_id: i64 = read!("{}\n");
     let s = client.get_subject(subject_id).await?.data;
     let (meaning_note, meaning_synonyms, reading_note) = match s {

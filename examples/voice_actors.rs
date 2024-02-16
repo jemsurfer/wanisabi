@@ -3,7 +3,7 @@ use wanisabi_model::voice_actor::VoiceActor;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![];
 
     let voice_actors: CollectionResponse<VoiceActor> =

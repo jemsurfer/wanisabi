@@ -3,7 +3,7 @@ use wanisabi_model::review::Review;
 
 #[tokio::main]
 async fn main() -> Result<(), wanisabi::Error> {
-    let client = Client::default();
+    let client = Client::default().await?;
     let params = vec![];
     //NOTE: this endpoint currently returns no data: (as of 06/02/24)
     //https://docs.api.wanikani.com/20170710/#get-all-reviews
