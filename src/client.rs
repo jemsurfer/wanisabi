@@ -4,6 +4,7 @@ use reqwest::Response;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_with::EnumMap;
+use sqlx::{migrate, migrate::MigrateDatabase};
 use sqlx::{sqlite::SqlitePoolOptions, SqlitePool};
 use std::{env, time::Duration};
 
@@ -26,14 +27,29 @@ pub mod macros {
     //Otherwise return a parsing/network error
     #[macro_export]
     macro_rules! check_query {
-        ($self:ident, $route:expr) => {
+        ($self:ident, $route:expr, $return:ty) => {
             if let Some(limiter) = &$self.rate_limiter {
                 if let Err(sleep) = limiter.try_wait() {
                     tokio::time::sleep(sleep).await;
                 }
             }
             if let Some(pool) = &$self.pool {
-                //Check whether we've already got the result and it's up to date
+                //__METHOD__
+                // - Check whether we've already got the result
+                // - If we do, then tell the query to use the updated_after filter
+                // - If the query returns nothing, then return the cached result
+                // - If the query return something, then return the result of the query
+                //and cache the result.
+                //__
+
+                //Stringify returns a quote-surrounded result
+                let route = stringify!($route);
+                //Extract the value inside the quotes, then remove any endpoint formatting (slashes)
+                let table = route.split("\"").nth(1).unwrap().split("/").nth(0).unwrap();
+                //Try and fetch any result which matches the query
+                let res = sqlx::query_as!($return, format!("SELECT * FROM {table}"))
+                    .fetch_one(&pool)
+                    .await?;
             }
         };
     }
@@ -151,7 +167,7 @@ pub mod macros {
 }
 
 impl Client {
-    //The default trait cannot be derived for async functions, so in the main impl block
+    //The default trait cannot be derived for async functions, so it's in the main impl block
     //By default, enable rate limiting & caching
     pub async fn default() -> Result<Self, crate::Error> {
         let client = reqwest::Client::new();
@@ -215,7 +231,15 @@ async fn rate_limiter_and_pool(
                 path.to_str().unwrap_or_default().to_owned()
             })
             .unwrap_or_default();
-        Some(SqlitePoolOptions::new().connect(&dir).await?)
+
+        //Create the database if it doesn't exist
+        if !sqlx::Sqlite::database_exists(&dir).await? {
+            sqlx::Sqlite::create_database(&dir).await?;
+        }
+        let pool = SqlitePoolOptions::new().connect(&dir).await?;
+        //Run migrations in case this is the first time the database has been used
+        migrate!("./migrations").run(&pool).await?;
+        Some(pool)
     } else {
         None
     };
