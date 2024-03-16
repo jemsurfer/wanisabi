@@ -1,6 +1,6 @@
 use crate::{
-    client::{Client, QueryProcessor},
-    get, process_response, post, put,
+    client::Client,
+    get, post, put,
     response::{CollectionResponse, IdResponse},
 };
 use chrono::{DateTime, Utc};

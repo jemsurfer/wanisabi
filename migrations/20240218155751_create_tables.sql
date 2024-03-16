@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "resources" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"object"	TEXT NOT NULL,
@@ -197,4 +196,3 @@ CREATE TABLE IF NOT EXISTS "radicals" (
 	FOREIGN KEY("id") REFERENCES "subjects"("id"),
 	PRIMARY KEY("id")
 );
-COMMIT;

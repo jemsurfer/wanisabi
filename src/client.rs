@@ -20,11 +20,7 @@ pub struct Client {
 pub struct QueryProcessor<T: DeserializeOwned + Serialize>(#[serde_as(as = "EnumMap")] pub Vec<T>);
 
 pub mod macros {
-    //Error parsing:
-    //Wanikani can either return data, or an error.
-    //So we need to first check whether the data we've got can be parsed into the struct we want
-    //Otherwise parse it to an error
-    //Otherwise return a parsing/network error
+    //Before the query is executed, check for rate limits, and check cached data.
     #[macro_export]
     macro_rules! check_query {
         ($self:ident, $route:expr, $return:ty) => {
@@ -53,6 +49,11 @@ pub mod macros {
             }
         };
     }
+    //Error parsing:
+    //Wanikani can either return data, or an error.
+    //So we need to first check whether the data we've got can be parsed into the struct we want
+    //Otherwise parse it to an error
+    //Otherwise return a parsing/network error
     #[macro_export]
     macro_rules! process_response {
         ($return:ty, $res:ident) => {{
@@ -65,39 +66,49 @@ pub mod macros {
     }
     #[macro_export]
     macro_rules! get {
-        //Single or unfiltered queries
-        ($name:tt, $route:expr, $return:ty $(, $v:tt: $t:ty)*) => {
-            pub async fn $name(&self $(, $v: $t)*) -> Result<$return, $crate::Error> {
+        //unfiltered (all) queries
+        ($name:tt, $route:expr, $return:ty) => {
+            pub async fn $name(&self) -> Result<$return, $crate::Error> {
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
-                let req = self
-                    .client
-                    .get(url)
-                    .bearer_auth(self.key.to_owned());
+                let req = self.client.get(url).bearer_auth(self.key.to_owned());
                 let res = req.send().await?.text().await?;
-                process_response!($return, res)
+                $crate::process_response!($return, res)
+            }
+        };
+        //Single (id) queries
+        ($name:tt, $route:expr, $return:ty, $id: tt: $t: ty) => {
+            pub async fn $name(&self, $id: $t) -> Result<$return, $crate::Error> {
+                let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
+                let req = self.client.get(url).bearer_auth(self.key.to_owned());
+                let res = req.send().await?.text().await?;
+                $crate::process_response!($return, res)
             }
         };
         //Filtered queries
-        ($name:tt, $route:expr, $query:ty, $return:ty $(, $v:tt: $t:ty)*) => {
-            pub async fn $name(&self, query: Vec<$query> $(, $v: $t)*) -> Result<$return, $crate::Error> {
-                let qp = QueryProcessor(query);
+        ($name:tt, $route:expr, $query:ty, $return:ty) => {
+            pub async fn $name(&self, query: Vec<$query>) -> Result<$return, $crate::Error> {
+                let qp = $crate::client::QueryProcessor(query);
                 let re = regex::Regex::new(r"\[\d+\]").unwrap();
                 let qs = qs::to_string(&qp).unwrap();
                 let qs = re.replace_all(qs.as_str(), "");
-                let mut q_map: std::collections::HashMap<String, String> = std::collections::HashMap::new();
+                let mut q_map: std::collections::HashMap<String, String> =
+                    std::collections::HashMap::new();
                 for q in qs.split("&") {
                     let mut item = q.split("=");
                     let k = item.next().unwrap();
                     let v = item.next().unwrap_or("");
                     if q_map.contains_key(&k.to_string()) {
-                        q_map.insert(k.to_string(), format!("{},{}", q_map.get(&k.to_string()).unwrap(), v));
+                        q_map.insert(
+                            k.to_string(),
+                            format!("{},{}", q_map.get(&k.to_string()).unwrap(), v),
+                        );
                     } else {
-                        q_map.insert(k.to_string(),v.to_string());
+                        q_map.insert(k.to_string(), v.to_string());
                     }
                 }
                 let mut queries: Vec<String> = vec![];
-                for (k,v) in q_map {
-                    queries.push(format!("{}={}",k,v));
+                for (k, v) in q_map {
+                    queries.push(format!("{}={}", k, v));
                 }
                 let qs = queries.join("&");
                 let url = String::from("https://api.wanikani.com/v2/") + &(format!($route));
@@ -108,16 +119,16 @@ pub mod macros {
                     .build()?;
                 req.url_mut().set_query(Some(&qs));
                 let res = self.client.execute(req).await?.text().await?;
-                process_response!($return, res)
+                $crate::process_response!($return, res)
             }
         };
     }
     #[macro_export]
     macro_rules! post {
         //Post requests need to be wrapped in a field matching the endpoint name.
-        //E.g. PUT assignments needs to be in the form:
+        //E.g.
         //{
-        //  assignments: {..}
+        //  assignments: data
         //}
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper: ident, $attr: ident $(,$v:tt: $t:ty)*) => {
             pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, $crate::Error> {
@@ -130,13 +141,13 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                process_response!($return, res)
+                $crate::process_response!($return, res)
             }
         };
     }
     #[macro_export]
     macro_rules! put {
-        //Most put requests need to be wrapped
+        //Most put requests need to be wrapped the same as post
         ($name:tt, $route:expr, $body:ty, $return:ty, $wrapper:ident, $attr: ident $(,$v:tt: $t:ty)*) => {
             pub async fn $name(&self, body: $body $(, $v: $t)*) -> Result<$return, $crate::Error> {
                 let wrapped = $wrapper{
@@ -148,7 +159,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(&wrapped);
                 let res = req.send().await?.text().await?;
-                process_response!($return, res)
+                $crate::process_response!($return, res)
             }
         };
         //Apart from assignments
@@ -160,7 +171,7 @@ pub mod macros {
                     .bearer_auth(self.key.to_owned())
                     .json(body);
                 let res = req.send().await?.text().await?;
-                process_response!($return, res)
+                $crate::process_response!($return, res)
             }
         };
     }
