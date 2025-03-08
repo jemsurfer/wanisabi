@@ -48,7 +48,7 @@ fn meaning_reading_note_and_synonyms(
     collect_reading: bool,
 ) -> (Option<String>, Option<Vec<String>>, Option<String>) {
     let meaning_note: String = read!("{}\n");
-    let meaning_note = if meaning_note.len() > 0 {
+    let meaning_note = if !meaning_note.is_empty() {
         Some(meaning_note)
     } else {
         None
@@ -62,7 +62,7 @@ fn meaning_reading_note_and_synonyms(
         }
         synonyms.push(inp);
     }
-    let synonyms = if synonyms.len() > 0 {
+    let synonyms = if !synonyms.is_empty() {
         Some(synonyms)
     } else {
         None

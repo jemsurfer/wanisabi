@@ -13,7 +13,7 @@ async fn main() -> Result<(), wanisabi::Error> {
         .get_assignments_filtered(vec![AssignmentsFilter::ImmediatelyAvailableForReview])
         .await?
         .data;
-    if reviews_assignments.len() == 0 {
+    if reviews_assignments.is_empty() {
         println!("No reviews available");
         return Ok(());
     }
@@ -78,7 +78,7 @@ async fn main() -> Result<(), wanisabi::Error> {
 fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) {
     let meanings: Vec<String> = meanings.iter().map(|x| x.meaning.to_lowercase()).collect();
     let mut ask_meaning = true;
-    let mut ask_reading = if readings.len() > 0 { true } else { false };
+    let mut ask_reading = !readings.is_empty();
     let (mut incorrect_meaning, mut incorrect_reading) = (0, 0);
     while ask_meaning || ask_reading {
         if ask_meaning {

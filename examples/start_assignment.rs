@@ -14,7 +14,7 @@ async fn main() -> Result<(), wanisabi::Error> {
         .get_assignments_filtered(vec![AssignmentsFilter::ImmediatelyAvailableForLessons])
         .await?
         .data;
-    if lesson_assignments.len() == 0 {
+    if lesson_assignments.is_empty() {
         println!("No lessons available");
         return Ok(());
     }
@@ -89,14 +89,14 @@ fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) 
     let meanings: Vec<String> = meanings.iter().map(|x| x.meaning.to_lowercase()).collect();
     let (mut meaning, mut reading) = ("".to_owned(), "".to_owned());
     let mut ask_meaning = true;
-    let mut ask_reading = if readings.len() > 0 { true } else { false };
+    let mut ask_reading = !readings.is_empty();
     let (mut incorrect_meaning, mut incorrect_reading) = (0, 0);
     while !meanings.contains(&meaning.to_lowercase()) && !readings.contains(&reading.to_lowercase())
     {
         if ask_meaning {
             println!("Please enter meaning");
             meaning = read!("{}\n");
-            if meaning.len() > 0 && meanings.contains(&meaning) {
+            if !meaning.is_empty() && meanings.contains(&meaning) {
                 println!("Meaning correct!");
                 ask_meaning = !ask_meaning;
             } else {
@@ -109,7 +109,7 @@ fn meaning_reading(meanings: Vec<Meaning>, readings: Vec<String>) -> (i64, i64) 
             println!("please enter reading.");
             reading = read!("{}\n");
             reading = reading.to_kana();
-            if reading.len() > 0 && readings.contains(&reading) {
+            if !reading.is_empty() && readings.contains(&reading) {
                 println!("Reading correct!");
                 ask_reading = !ask_reading;
             } else {

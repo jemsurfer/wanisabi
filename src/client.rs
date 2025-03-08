@@ -212,12 +212,11 @@ impl Client {
                 tokio::time::sleep(sleep).await;
             }
         }
-        Ok(self
-            .client
+        self.client
             .get(url)
             .bearer_auth(self.key.clone())
             .send()
-            .await?)
+            .await
     }
 }
 
